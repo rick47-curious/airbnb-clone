@@ -1,0 +1,46 @@
+const express = require('express');
+const path = require('path');
+const ejs = require('ejs');
+const app = express();
+const PORT = 3000;
+const homePageController = require('./controller/HomePageController');
+
+app.set('view engine','ejs');//Telling express that this engine will be used
+app.use(express.urlencoded({extended:true}));
+app.use(express.json());
+app.use(express.static('views'));
+//Serve the public folder
+app.use(express.static('public'));
+//Serve the static css files
+app.use(express.static(path.join(__dirname,'/views/css')));
+//Serve the static js files
+app.use(express.static(path.join(__dirname,'/views/js')));
+app.get('/',async (req,res)=>{
+    //let result = await homePageController.get();
+    //res.render('Homepage',result);
+    res.render('Homepage');
+})
+
+app.get('/search',async (req,res)=>{
+    let parameters = req.query;
+    //let result = await homePageController.getQuery(req.query);
+    res.render('Homepage');
+})
+
+app.post('/auth',async (req,res)=>{
+    
+    let jsonArrayRespose = await homePageController.authenticateUser(req.body); 
+    if (jsonArrayRespose.length !=0){
+        res.json(jsonArrayRespose[0]);    
+    }else{
+        res.json({});    
+    }
+})
+
+app.post('/register',async (req,res)=>{
+    
+})
+
+app.listen(PORT,()=>{
+    console.log("The app is running at port: "+PORT);
+});
