@@ -37,7 +37,10 @@ module.exports = {
         let result = await homePageModel.authenticateUserDB(requestEmail,phoneNumber);
        
         return result;
-    }
+    },
+    addUser: async(request)=>{
+       let result = await homePageModel.insertUser(request);
 
-            
+       return result
+    }         
 }

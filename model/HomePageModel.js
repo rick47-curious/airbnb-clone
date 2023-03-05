@@ -51,3 +51,16 @@ exports.authenticateUserDB = async(reqemail,reqphone)=>{
         await client.close();
     }
 }
+
+exports.insertUser = async (request)=>{
+    let output;
+    try {
+        await client.connect();
+        output = await client.db("sample_airbnb").collection("users").insertOne(request);
+        return output
+    } catch (error) {
+        console.log(error);
+    }finally{
+        client.close();
+    }
+}

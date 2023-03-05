@@ -16,15 +16,13 @@ app.use(express.static(path.join(__dirname,'/views/css')));
 //Serve the static js files
 app.use(express.static(path.join(__dirname,'/views/js')));
 app.get('/',async (req,res)=>{
-    //let result = await homePageController.get();
-    //res.render('Homepage',result);
-    res.render('Homepage');
+    let result = await homePageController.get();
+    res.render('Homepage',result);
 })
 
 app.get('/search',async (req,res)=>{
-    let parameters = req.query;
-    //let result = await homePageController.getQuery(req.query);
-    res.render('Homepage');
+    let result = await homePageController.getQuery(req.query);
+    res.render('Homepage',result);
 })
 
 app.post('/auth',async (req,res)=>{
@@ -38,7 +36,8 @@ app.post('/auth',async (req,res)=>{
 })
 
 app.post('/register',async (req,res)=>{
-    
+    let jsonResponse = await homePageController.addUser(req.body);
+    res.json(jsonResponse);
 })
 
 app.listen(PORT,()=>{
