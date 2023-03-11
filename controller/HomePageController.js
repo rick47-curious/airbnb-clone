@@ -1,11 +1,12 @@
-const homePageModel = require('../model/HomePageModel');
+const homePageModel = require('../model/Model');
 function isCharacter(char){
     return new RegExp("[a-zA-Z]").test(char);
 }
 module.exports = {
     get: async ()=>{
         const result =  {
-            "result": await homePageModel.fetchProperties()
+            "response": await homePageModel.fetchProperties(),
+            "type":"properties"
         }
         return result;
     },

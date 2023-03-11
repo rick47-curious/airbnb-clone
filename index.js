@@ -1,9 +1,12 @@
 const express = require('express');
 const path = require('path');
 const ejs = require('ejs');
+const admin = require('./routes/admin');
 const app = express();
 const PORT = 3000;
 const homePageController = require('./controller/HomePageController');
+//Setting the routes
+app.use('/admin',admin);
 
 app.set('view engine','ejs');//Telling express that this engine will be used
 app.use(express.urlencoded({extended:true}));
@@ -38,6 +41,16 @@ app.post('/auth',async (req,res)=>{
 app.post('/register',async (req,res)=>{
     let jsonResponse = await homePageController.addUser(req.body);
     res.json(jsonResponse);
+})
+
+app.use((error,req,res,next)=>{
+    res.send({
+        success:false,
+        message: "Something went wrong , please contact helpdesk",
+        failureReason: error.message
+    })
+
+    next()
 })
 
 app.listen(PORT,()=>{
