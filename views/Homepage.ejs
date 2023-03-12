@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Homepage</title>
+  <title>Holiday Homes & Apartment Rentals - Airbnb</title>
   <!-- Link CDN -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
   <!-- Link to fonts -->
@@ -223,17 +223,17 @@
     </nav>
     <!-- Property List/Gallery -->
     <div class="container grid-container">
-      <% for( let index = 0; index < result.length; index++ ) { %>
+      <% for( let index = 0; index < response.length; index++ ) { %>
         <div class="col-md grid-col">
-          <img src="<%=result[index].images.picture_url%>" alt="" class="property-image" srcset="">
+          <img src="<%=response[index].images.picture_url%>" alt="" class="property-image" srcset="">
           <div class="prop-details">
-            <p class="prop-name"><%=result[index].address.market +", "+result[index].address.country%> 
-              <% if (result[index].review_scores.review_scores_value !=null) { %>
+            <p class="prop-name"><%=response[index].address.market +", "+response[index].address.country%> 
+              <% if (response[index].review_scores.review_scores_value !=null) { %>
                 <span class="rating">
                   <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill star-img" viewBox="0 0 16 16">
                     <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
                   </svg>  
-                  <span class="no-style"><%= result[index].review_scores.review_scores_value %></span>
+                  <span class="no-style"><%= response[index].review_scores.review_scores_value %></span>
                 </span>
               <% } %>
             </p>
@@ -259,7 +259,7 @@
               const modifiedString = currentDay==30 || currentDay==31 || currentMonth==2 ? `1 - ${1+Math.ceil(Math.random()*10)} ${monthName[currentMonth+1]}`: `${currentDay} - ${currentDay + Math.ceil(Math.random()*10)} ${monthName[currentMonth+1]}` ;  %>
               <%= modifiedString %>
             </p>
-            <p class="prop-price">$<%= result[index].price%> <span class="no-style">night</span></p>
+            <p class="prop-price">$<%= response[index].price%> <span class="no-style">night</span></p>
           </div>
         </div>
       <% } %>

@@ -30,11 +30,9 @@ body{
 }
 
 .navigation-menu > li:hover{
-    background-color: #cac9c9;
-}
-.navigation-menu > .active{
     background-color: rgb(243, 51, 109);
     font-weight: 600;
+    cursor:pointer;
 }
 .nav-header{
     color:rgb(243, 51, 109);

@@ -247,7 +247,7 @@ if (!location.href.includes("users")) {
             })
         })
     })
-}
+}else{
 
 // User section below
 document.querySelector(".users-grid .header .add-prop").addEventListener("click", () => {
@@ -349,3 +349,25 @@ document.querySelectorAll(".users-rev").forEach(element => {
         })
     })
 });
+}
+document.querySelector("#aside-menu .navigation-menu #option-1").addEventListener('click',()=>{
+    let currentUrl = location.href;
+    if (currentUrl.includes("users")){
+        location.href = currentUrl.substring(0,currentUrl.indexOf("/users"));
+    }else{
+        location.reload();
+    }
+    document.querySelector("#aside-menu .navigation-menu #option-1").classList = "active";
+    document.querySelector("#aside-menu .navigation-menu #option-2").classList = "";
+})
+
+document.querySelector("#aside-menu .navigation-menu #option-2").addEventListener('click',()=>{
+    let currentUrl = location.href;
+    if (currentUrl.includes("users")){
+        location.reload();     
+    }else{
+        location.href = currentUrl + "users";
+    }
+    document.querySelector("#aside-menu .navigation-menu #option-2").classList = "active";
+    document.querySelector("#aside-menu .navigation-menu #option-1").classList = "";
+})
