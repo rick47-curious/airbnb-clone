@@ -25,5 +25,13 @@ module.exports = {
             type:"users"
         }
         return result;
+    },
+    addUser: async(request)=>{
+        let result = await model.addUserToDB(request);
+        return result;
+    },
+    deleteUser: async(filter)=>{
+        let result = await model.deleteUser(filter);
+        return result;
     }
 }

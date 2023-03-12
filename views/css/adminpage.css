@@ -119,6 +119,32 @@ body{
 .headText{
     margin-left:6.5rem;
 }
+/* Add user dialog */
+#add-user-dialog{
+    max-width: 30rem;
+    height:28rem;
+    margin:0 auto;
+    background-color: white;
+    border:1px solid #8f8f8f;
+    padding:0.7rem;
+    overflow-y: scroll;
+    position:absolute;
+    left:38%;
+    bottom:22%;
+    box-shadow: 2px 3px 12px #8f8f8f;
+}
+
+#add-user-dialog form label{
+    position: absolute;
+    top: -20%; 
+}
+
+#add-user-dialog .header *{
+    display: inline-block; 
+}
+#add-user-dialog .headText{
+    margin-left:8rem;
+}
 
 /*Delete Alert modal */
 .alertBox{

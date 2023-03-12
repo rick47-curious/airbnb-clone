@@ -217,6 +217,51 @@
               <button class="btn btn-secondary px-4" id="no">No</button>
           </div>
         </div>
+        <div class="container" id="add-user-dialog" style="display:none">
+           <div class="header">
+                <button class="btn close-btn">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x"
+                    viewBox="0 0 16 16">
+                    <path
+                      d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                  </svg>
+                </button>
+                <h5 class="text-center headText">Add User</h5>
+              </div>
+            <form action="" method="" id="propertyForm">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInput" placeholder="" name="firstname">
+                    <label for="floatingInput">FirstName</label>
+                  </div>
+                  <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInput" placeholder="" name="lastname">
+                    <label for="floatingInput">LastName</label>
+                  </div>
+                  <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInput" placeholder="" name="email">
+                    <label for="floatingInput">Email</label>
+                  </div>
+                  <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInput" placeholder="" name="phone">
+                    <label for="floatingInput">Phone</label>
+                  </div>
+                  <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInput" placeholder="" name="usercountry">
+                    <label for="floatingInput">Country</label>
+                  </div>
+                  <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInput" placeholder="" name="dob">
+                    <label for="floatingInput">DOB</label>
+                  </div>
+                  <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="floatingInput" placeholder="" name="password">
+                    <label for="floatingInput">Password</label>
+                  </div>
+                  <div class="mb-4">
+                    <button type="submit" class="btn formbutton" id="authSubmit">Add</button>
+                  </div>
+            </form>
+        </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
         integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"

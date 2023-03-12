@@ -129,3 +129,28 @@ exports.getUsers = async()=>{
         await client.close();
     }
 }
+exports.addUserToDB = async(request)=>{
+    let output;
+    try {
+        await client.connect();
+        output = await client.db('sample_airbnb').collection('users').insertOne(request);
+        return output;
+    } catch (error) {
+        console.log(error);
+    }finally{
+        await client.close();
+    }
+}
+
+exports.deleteUser = async (filter)=>{
+    let output;
+    try {
+        await client.connect();
+        output = await client.db('sample_airbnb').collection('users').deleteOne(filter);
+        return output;
+    } catch (error) {
+        console.log(error);
+    }finally{
+        await client.close();
+    }
+}
