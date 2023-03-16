@@ -2,11 +2,13 @@ const express = require('express');
 const path = require('path');
 const ejs = require('ejs');
 const admin = require('./routes/admin');
+const property = require('./routes/property')
 const app = express();
 const PORT = 3000;
 const homePageController = require('./controller/HomePageController');
 //Setting the routes
 app.use('/admin',admin);
+app.use('/rooms',property);
 
 app.set('view engine','ejs');//Telling express that this engine will be used
 app.use(express.urlencoded({extended:true}));
