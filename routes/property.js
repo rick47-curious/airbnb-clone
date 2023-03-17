@@ -1,8 +1,7 @@
 const express = require('express');
 const path = require('path');
 const app = express.Router();
-const homePageController = require('../controller/HomePageController');
-const adminPageController = require('../controller/AdminPageController');
+const propertyPageController = require('../controller/PropertyPageController');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -14,8 +13,11 @@ app.use(express.static(path.join(__dirname, '/views/css')));
 app.use(express.static(path.join(__dirname, '/views/js')));
 
 
-app.get('/',(req,res)=>{
-    res.render('Propertypage');
+app.get('/:id',async (req,res)=>{
+    let propName = req.params['id'];
+    let response = await propertyPageController.fetchPropertyDetails(propName);
+    res.render('Propertypage',response);
+
 })
 
 

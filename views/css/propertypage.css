@@ -33,7 +33,7 @@ z-index:50;
 }
 
 .header-container{
-  width:83%;
+  width:81%;
   margin:1.5rem auto;
 }
 
@@ -296,6 +296,11 @@ z-index:50;
   }
   .review-item{
     width:45%;
+  }
+
+  .review-item .comment{
+    max-height: 6rem;
+    overflow-y: scroll;
   }
   /* host section */
   .host-info .host-acheivement{

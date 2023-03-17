@@ -225,6 +225,7 @@
     <div class="container grid-container">
       <% for( let index = 0; index < response.length; index++ ) { %>
         <div class="col-md grid-col">
+          <div id="prop_id" hidden><%=response[index]._id%></div>
           <img src="<%=response[index].images.picture_url%>" alt="" class="property-image" srcset="">
           <div class="prop-details">
             <p class="prop-name"><%=response[index].address.market +", "+response[index].address.country%> 
