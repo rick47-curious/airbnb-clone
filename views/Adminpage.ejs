@@ -64,7 +64,9 @@
             <h3 class="h3 nav-header">Navigation Panel</h3>
             <ul class="navigation-menu">
                 <li id="option-1">Properties</li>
-                <li id="option-2">Users</li>
+                <% if (userType === "admin") { %>
+                  <li id="option-2">Users</li>
+                <% } %>
             </ul>
         </aside>
         <% if (type === "properties") {%>

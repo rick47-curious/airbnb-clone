@@ -4,6 +4,7 @@ const ejs = require('ejs');
 const admin = require('./routes/admin');
 const property = require('./routes/property')
 const booking = require('./routes/booking');
+const host = require('./routes/host');
 const app = express();
 const PORT = 3000;
 const homePageController = require('./controller/HomePageController');
@@ -11,6 +12,7 @@ const homePageController = require('./controller/HomePageController');
 app.use('/admin',admin);
 app.use('/rooms',property);
 app.use('/book',booking);
+app.use('/host',host);
 
 app.set('view engine','ejs');//Telling express that this engine will be used
 app.use(express.urlencoded({extended:true}));

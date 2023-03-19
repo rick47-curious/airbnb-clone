@@ -361,13 +361,15 @@ document.querySelector("#aside-menu .navigation-menu #option-1").addEventListene
     document.querySelector("#aside-menu .navigation-menu #option-2").classList = "";
 })
 
-document.querySelector("#aside-menu .navigation-menu #option-2").addEventListener('click',()=>{
-    let currentUrl = location.href;
-    if (currentUrl.includes("users")){
-        location.reload();     
-    }else{
-        location.href = currentUrl + "users";
-    }
-    document.querySelector("#aside-menu .navigation-menu #option-2").classList = "active";
-    document.querySelector("#aside-menu .navigation-menu #option-1").classList = "";
-})
+if (!location.href.includes('host')){
+    document.querySelector("#aside-menu .navigation-menu #option-2").addEventListener('click',()=>{
+        let currentUrl = location.href;
+        if (currentUrl.includes("users")){
+            location.reload();     
+        }else{
+            location.href = currentUrl + "users";
+        }
+        document.querySelector("#aside-menu .navigation-menu #option-2").classList = "active";
+        document.querySelector("#aside-menu .navigation-menu #option-1").classList = "";
+    })
+}

@@ -154,3 +154,16 @@ exports.deleteUser = async (filter)=>{
         await client.close();
     }
 }
+
+exports.getHostProperties = async(filter)=>{
+    let output;
+    try {
+        await client.connect();
+        output = await client.db('sample_airbnb').collection('users').findOne(filter,{projection:{password:0}});
+        return output;
+    } catch (error) {
+        console.log(error);
+    }finally{
+        await client.close();
+    }
+}
