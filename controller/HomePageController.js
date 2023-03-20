@@ -41,7 +41,7 @@ module.exports = {
     },
     addUser: async(request)=>{
        let result = await homePageModel.insertUser(request);
-
+       
        return result
     }         
 }
