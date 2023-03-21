@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, '/views/js')));
 let updateFilter = "";
 app.get('/', async (req, res) => {
     let result = await homePageController.get();
-    //TODO: append usertype prop as admin
+    result['userType'] = "admin";
     res.render('Adminpage', result);
 })
 

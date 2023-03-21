@@ -4,9 +4,9 @@ module.exports = {
     getHostProperties:async (reqEmail,reqPhone)=>{
         let dbResponse;
         if (reqEmail == 'undefined'){
-            dbResponse = await model.getUserProperty({phone:reqPhone});
+            dbResponse = await model.getHostProperties({phone:reqPhone});
         }else if (reqPhone == 'undefined'){
-            dbResponse = await model.getUserProperty({email:reqEmail});
+            dbResponse = await model.getHostProperties({email:reqEmail});
         }
         let res = {
             response: (dbResponse.properties == null || dbResponse.properties == undefined?[]:dbResponse.properties),

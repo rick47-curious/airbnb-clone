@@ -1,3 +1,8 @@
+//Alert section
+const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+if (location.href.includes("host")){
+    document.title = "Airbnb- Host corner";
+}
 //Properties section
 if (!location.href.includes("users")) {
     document.querySelector(".header .add-prop").addEventListener('click', () => {
@@ -35,7 +40,16 @@ if (!location.href.includes("users")) {
     // Form submisssion
     document.getElementById("propertyForm").addEventListener("submit", (e) => {
         e.preventDefault();
-
+        if (location.href.includes("host")){
+            document.querySelector(".add-prop-dialog").style.display = "none";
+            document.querySelector(".navbar").style.opacity = "1";
+            document.getElementById("aside-menu").style.opacity = "1";
+            document.querySelector(".grid-display").style.opacity = "1";
+            
+            alertPlaceholder.appendChild(alert("Success! admin has been informed about the property addition request"));
+            return
+            
+        }
         let requestBody = {
             "name": document.getElementsByName("propname")[0].value,
             "address": {
@@ -136,26 +150,49 @@ if (!location.href.includes("users")) {
             document.querySelector("#propertyForm .formbutton").innerHTML = "Edit"
             //Grabbing the name of the record to be edited
             let requiredDiv = element.parentElement.parentElement.parentElement;
+            if (location.href.includes("admin")){
+                let fetchResult = fetch(`/admin/getProperty?name=${requiredDiv.getElementsByClassName("col")[0].innerHTML}`);
 
-            let fetchResult = fetch(`/admin/getProperty?name=${requiredDiv.getElementsByClassName("col")[0].innerHTML}`);
+                fetchResult.then(res => res.json()).then(response => {
+                    let inputForm = document.getElementById("propertyForm");
+                    inputForm.querySelectorAll("div input")[0].value = response.name;
 
-            fetchResult.then(res => res.json()).then(response => {
+                    inputForm.querySelectorAll("div input")[1].value = response.address.market;
+                    inputForm.querySelectorAll("div input")[2].value = response.address.country;
+                    inputForm.querySelectorAll("div input")[3].value = response.accommodates;
+                    inputForm.querySelectorAll("div input")[4].value = response.images["picture_url"];
+                    inputForm.querySelectorAll("div input")[5].value = response.price["$numberDecimal"];
+                    let review = response["review_scores"];
+                    inputForm.querySelectorAll("div input")[6].value = review["review_scores_value"];
+
+                }).catch(error => {
+                    console.log(error);
+                })
+            }else if (location.href.includes("host")){
                 let inputForm = document.getElementById("propertyForm");
-                inputForm.querySelectorAll("div input")[0].value = response.name;
+                let parent_row = element.parentElement.parentElement.parentElement;
+                inputForm.querySelectorAll("div input")[0].value = parent_row.querySelectorAll('.col')[0].innerHTML;
 
-                inputForm.querySelectorAll("div input")[1].value = response.address.market;
-                inputForm.querySelectorAll("div input")[2].value = response.address.country;
-                inputForm.querySelectorAll("div input")[3].value = response.accommodates;
-                inputForm.querySelectorAll("div input")[4].value = response.images["picture_url"];
-                inputForm.querySelectorAll("div input")[5].value = response.price["$numberDecimal"];
-                let review = response["review_scores"];
-                inputForm.querySelectorAll("div input")[6].value = review["review_scores_value"];
-
-            }).catch(error => {
-                console.log(error);
-            })
+                inputForm.querySelectorAll("div input")[1].value = parent_row.querySelectorAll('.col')[1].innerHTML;
+                inputForm.querySelectorAll("div input")[2].value = parent_row.querySelectorAll('.col')[2].innerHTML;
+                inputForm.querySelectorAll("div input")[3].value = parent_row.querySelectorAll('.col')[3].innerHTML;
+                inputForm.querySelectorAll("div input")[4].value = "";
+                inputForm.querySelectorAll("div input")[5].value = parent_row.querySelectorAll('.col')[4].innerHTML;
+                
+                inputForm.querySelectorAll("div input")[6].value = parent_row.querySelectorAll('.col')[5].querySelector('div').innerHTML; 
+            }
             document.getElementsByClassName("formbutton")[0].addEventListener("click", (e) => {
                 e.preventDefault();
+                if (location.href.includes("host")){
+                    document.querySelector(".add-prop-dialog").style.display = "none";
+                    document.querySelector(".navbar").style.opacity = "1";
+                    document.getElementById("aside-menu").style.opacity = "1";
+                    document.querySelector(".grid-display").style.opacity = "1";
+                    
+                    alertPlaceholder.appendChild(alert("Success! admin has been informed about the property edit request"));
+                    return
+                    
+                }
                 let request = {
                     "name": document.getElementsByName("propname")[0].value,
                     "address": {
@@ -217,6 +254,16 @@ if (!location.href.includes("users")) {
                 document.getElementById("aside-menu").style.opacity = "1";
                 document.querySelector(".grid-display").style.opacity = "1";
 
+                if (location.href.includes("host")){
+                    document.querySelector(".add-prop-dialog").style.display = "none";
+                    document.querySelector(".navbar").style.opacity = "1";
+                    document.getElementById("aside-menu").style.opacity = "1";
+                    document.querySelector(".grid-display").style.opacity = "1";
+                    
+                    alertPlaceholder.appendChild(alert("Success! admin has been informed about the property deletion request"));
+                    return
+                    
+                }
                 let requiredDiv = element.parentElement.parentElement.parentElement;
                 let result = fetch(`/admin/deleteProperty?name=${requiredDiv.getElementsByClassName("col")[0].innerHTML}`, {
                     method: "DELETE",
@@ -365,11 +412,26 @@ if (!location.href.includes('host')){
     document.querySelector("#aside-menu .navigation-menu #option-2").addEventListener('click',()=>{
         let currentUrl = location.href;
         if (currentUrl.includes("users")){
-            location.reload();     
+            location.reload();    
         }else{
             location.href = currentUrl + "users";
         }
         document.querySelector("#aside-menu .navigation-menu #option-2").classList = "active";
         document.querySelector("#aside-menu .navigation-menu #option-1").classList = "";
     })
+}
+
+
+const alert = (message) => {
+  const wrapper = document.createElement('div')
+  wrapper.innerHTML = [
+    `<div class="alert alert-success alert-dismissible" role="alert">`,
+    `   <div>${message}</div>`,
+    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+    '</div>'
+  ].join('')
+
+  alertPlaceholder.append(wrapper)
+
+  return wrapper;
 }
