@@ -1,3 +1,6 @@
+//Global Json
+let globJson = {};
+
 
 document.querySelectorAll(".searchbox > *",).forEach((divElement) => {
     //Include upper nav having Stays, Experience, Online experiences upon click on any span inside
@@ -243,35 +246,47 @@ elementDropdownButtonArea.forEach((element, key) => {
     })
 });
 
+document.getElementById("navbarBtn").addEventListener('click', () => {
+    if (document.querySelector(".nav-dropdown >li >button#directToAdmin")) {
+        document.querySelector(".nav-dropdown >li >button#directToAdmin").addEventListener('click', () => {
+            location.href = "http://localhost:3000/admin";
+        })
+    }else if (document.querySelector(".nav-dropdown >li >button#directToHost")){
+        document.querySelector(".nav-dropdown >li >button#directToHost").addEventListener('click', () => {
+            location.href = `http://localhost:3000/host?email=${globJson.email}&phone=${globJson.phoneNumber}`;
+    }) 
+    }
+})
+
 //For making Login/Signup page visible
 document.querySelectorAll(".nav-dropdown >li >button")[0].addEventListener("click", () => {
     document.getElementById("userLogin").style.display = "block";
     document.querySelector('.main').style.opacity = "0.5";
     //For toggling Email and Phone login
-    if (document.getElementById("EmailLogin")!=null){
+    if (document.getElementById("EmailLogin") != null) {
         document.getElementById("EmailLogin").addEventListener('click', (e) => {
-        e.preventDefault();
-        document.querySelectorAll("#userLogin > .container > form > .form-floating")[0].style.display = "none";
-        document.querySelectorAll("#userLogin > .container > form > .form-floating")[1].style.display = "none";
-        document.querySelectorAll("#userLogin > .container > form > .form-floating")[2].style.display = "block";
-        document.querySelectorAll("#userLogin > .container > .login-alt")[4].style.display = "block";
-        document.querySelectorAll("#userLogin > .container > .login-alt")[3].style.display = "none";
+            e.preventDefault();
+            document.querySelectorAll("#userLogin > .container > form > .form-floating")[0].style.display = "none";
+            document.querySelectorAll("#userLogin > .container > form > .form-floating")[1].style.display = "none";
+            document.querySelectorAll("#userLogin > .container > form > .form-floating")[2].style.display = "block";
+            document.querySelectorAll("#userLogin > .container > .login-alt")[4].style.display = "block";
+            document.querySelectorAll("#userLogin > .container > .login-alt")[3].style.display = "none";
         });
     }
-    if (document.getElementById("PhoneLogin")!=null){
+    if (document.getElementById("PhoneLogin") != null) {
         document.getElementById("PhoneLogin").addEventListener('click', (e) => {
-        e.preventDefault();
-        document.querySelectorAll("#userLogin > .container > form > .form-floating")[2].style.display = "none";
-        document.querySelectorAll("#userLogin > .container > form > .form-floating")[0].style.display = "block";
-        document.querySelectorAll("#userLogin > .container > form > .form-floating")[1].style.display = "block";
+            e.preventDefault();
+            document.querySelectorAll("#userLogin > .container > form > .form-floating")[2].style.display = "none";
+            document.querySelectorAll("#userLogin > .container > form > .form-floating")[0].style.display = "block";
+            document.querySelectorAll("#userLogin > .container > form > .form-floating")[1].style.display = "block";
 
-        document.querySelectorAll("#userLogin > .container > .login-alt")[4].style.display = "none";
-        document.querySelectorAll("#userLogin > .container > .login-alt")[3].style.display = "block";
+            document.querySelectorAll("#userLogin > .container > .login-alt")[4].style.display = "none";
+            document.querySelectorAll("#userLogin > .container > .login-alt")[3].style.display = "block";
 
         });
     }
     //Ajax handling for Login/Signup form
-    if (document.getElementById("loginSignupForm")!=null){
+    if (document.getElementById("loginSignupForm") != null) {
 
         //Handling close button operation for login/signup dialog
         if (document.querySelector("#userLogin > div > .header > .close-btn") != null) {
@@ -284,53 +299,60 @@ document.querySelectorAll(".nav-dropdown >li >button")[0].addEventListener("clic
             })
         }
         document.getElementById("loginSignupForm").addEventListener('submit', (e) => {
-        e.preventDefault();
+            e.preventDefault();
 
-        let requestJson = {
-            "countryCode": document.getElementsByName("countryCode")[0].value,
-            "email": document.getElementsByName("email")[0].value,
-            "phoneNumber": document.getElementsByName("phoneNumber")[0].value
-        }
-        //POST call from form input
-        let fetchResult = fetch("http://localhost:3000/auth", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(requestJson)
-        });
+            let requestJson = {
+                "countryCode": document.getElementsByName("countryCode")[0].value,
+                "email": document.getElementsByName("email")[0].value,
+                "phoneNumber": document.getElementsByName("phoneNumber")[0].value
+            }
+            //Setting email and phoneNumber in global json
+            globJson['email'] = requestJson.email?requestJson.email:undefined;
+            globJson['phoneNumber'] = requestJson.phoneNumber?requestJson.phoneNumber:undefined;
+            //POST call from form input
+            let fetchResult = fetch("http://localhost:3000/auth", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(requestJson)
+            });
 
-        fetchResult.then(res => res.json()).then((response) => {
-            
-            if ((response.email != undefined || response.phone != undefined) && (response.email == requestJson.email || response.phone.substring(4) == requestJson.phoneNumber)) {
-                console.log("Inside");
-                document.getElementById("userLogin").style.display = "none";
-                //Remove default icon
-                document.querySelector(".bi-person-circle").remove();
-                //Add username's first name's first character as a badge
-                let userBadgeDiv = document.createElement("div");
-                userBadgeDiv.setAttribute("class", "circle");
-                let userSpan = document.createElement("span");
-                userSpan.setAttribute("class", "circle__content");
-                userBadgeDiv.appendChild(userSpan);
-                userSpan.innerText = response.firstname.charAt(0);
-                document.getElementById("navbarBtn").appendChild(userBadgeDiv);
-                //Set the background opacity to original
-                document.querySelector('.main').style.opacity = "1";
-                //Remove signup and Login options from the user-loggedin dropdown
-                document.querySelector(".clubbed-items .navbar-nav .dropdown-menu").innerHTML = "";
-                document.querySelector(".clubbed-items .navbar-nav .dropdown-menu").innerHTML = `<li><button class="dropdown-item" type="button">Airbnb your home</button></li>
+            fetchResult.then(res => res.json()).then((response) => {
+
+                if ((response.email != undefined || response.phone != undefined) && (response.email == requestJson.email || response.phone.substring(4) == requestJson.phoneNumber)) {
+                    document.getElementById("userLogin").style.display = "none";
+                    //Remove default icon
+                    document.querySelector(".bi-person-circle").remove();
+                    //Add username's first name's first character as a badge
+                    let userBadgeDiv = document.createElement("div");
+                    userBadgeDiv.setAttribute("class", "circle");
+                    let userSpan = document.createElement("span");
+                    userSpan.setAttribute("class", "circle__content");
+                    userBadgeDiv.appendChild(userSpan);
+                    userSpan.innerText = response.firstname.charAt(0);
+                    document.getElementById("navbarBtn").appendChild(userBadgeDiv);
+                    //Set the background opacity to original
+                    document.querySelector('.main').style.opacity = "1";
+                    //Remove signup and Login options from the user-loggedin dropdown
+                    document.querySelector(".clubbed-items .navbar-nav .dropdown-menu").innerHTML = "";
+                    if (response.type == "admin") {
+                        document.querySelector(".clubbed-items .navbar-nav .dropdown-menu").innerHTML += `<li><button class="dropdown-item" type="button" id="directToAdmin">Admin Corner</button></li>`;
+                    } else if (response.type == "host") {
+                        document.querySelector(".clubbed-items .navbar-nav .dropdown-menu").innerHTML += `<li><button class="dropdown-item" type="button" id="directToHost">Host Corner</button></li>`;
+                    }
+                    document.querySelector(".clubbed-items .navbar-nav .dropdown-menu").innerHTML += `<li><button class="dropdown-item" type="button">Airbnb your home</button></li>
                 <li><button class="dropdown-item" type="button">Host an experience</button></li>
-                <li><button class="dropdown-item" type="button">Help</button></li>`
-            } else {
-                document.querySelector("#userLogin .header .headText").remove();
-                let header = document.createElement("h5");
-                header.classList = "text-center headText mt-2";
-                header.innerHTML = "Finish signing up";
+                <li><button class="dropdown-item" type="button">Help</button></li>`;
+                } else {
+                    document.querySelector("#userLogin .header .headText").remove();
+                    let header = document.createElement("h5");
+                    header.classList = "text-center headText mt-2";
+                    header.innerHTML = "Finish signing up";
 
-                document.querySelector("#userLogin .header").appendChild(header);
+                    document.querySelector("#userLogin .header").appendChild(header);
 
-                document.querySelector("#userLogin .container").innerHTML = `<form id="registerForm">
+                    document.querySelector("#userLogin .container").innerHTML = `<form id="registerForm">
                 <div class="form-floating">
                   <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="firstname">
                   <label for="floatingInput">First name</label>
@@ -368,22 +390,22 @@ document.querySelectorAll(".nav-dropdown >li >button")[0].addEventListener("clic
                 </div>
               </form>`;
 
-                document.getElementsByName("email")[0].value = requestJson.email;
-                document.querySelector("#userLogin > div.mb-2 > div > button").addEventListener('click', () => {
-                   
-                    document.querySelector("#userLogin .header .headText").remove();
-                    document.querySelector("#userLogin .header button").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x"
+                    document.getElementsByName("email")[0].value = requestJson.email;
+                    document.querySelector("#userLogin > div.mb-2 > div > button").addEventListener('click', () => {
+
+                        document.querySelector("#userLogin .header .headText").remove();
+                        document.querySelector("#userLogin .header button").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x"
                         viewBox="0 0 16 16">
                         <path
                         d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
                     </svg>`;
-            let header = document.createElement("h5");
-            header.classList = "text-center headText mt-2";
-            header.innerHTML = "Login or signup";
+                        let header = document.createElement("h5");
+                        header.classList = "text-center headText mt-2";
+                        header.innerHTML = "Login or signup";
 
-            document.querySelector("#userLogin .header").appendChild(header);
-   
-            document.querySelector("#userLogin .container").innerHTML = `<h4 class="mb-4">Welcome to Airbnb</h4>
+                        document.querySelector("#userLogin .header").appendChild(header);
+
+                        document.querySelector("#userLogin .container").innerHTML = `<h4 class="mb-4">Welcome to Airbnb</h4>
                         <form id="loginSignupForm">
                         <div class="form-floating">
                             <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="countryCode">
@@ -699,214 +721,59 @@ document.querySelectorAll(".nav-dropdown >li >button")[0].addEventListener("clic
                         </span>
                         <button class="btn alt-login">Continue with Phone</button>
                         </div>`;
-                });
-                
-                document.querySelector("#userLogin .container #registerForm").addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    let requestJson = {
-                        "firstname": document.getElementsByName("firstname")[0].value,
-                        "lastname": document.getElementsByName("lastname")[0].value,
-                        "email": document.getElementsByName("email")[0].value,
-                        "dob": document.getElementsByName("dob")[0].value,
-                        "password": document.getElementsByName("password")[0].value
-                    }
-                    //POST call from form input
-                    let fetchResult = fetch("http://localhost:3000/register", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify(requestJson)
                     });
 
-                    fetchResult.then(res => res.json()).then((response) => {
-                        document.getElementById("userLogin").style.display = "none";
-                        document.querySelector('.main').style.opacity = "1";
-                        document.querySelector(".bi-person-circle").remove();
-                        //Add username's first name's first character as a badge
-                        let userBadgeDiv = document.createElement("div");
-                        userBadgeDiv.setAttribute("class", "circle");
-                        let userSpan = document.createElement("span");
-                        userSpan.setAttribute("class", "circle__content");
-                        userBadgeDiv.appendChild(userSpan);
-                        userSpan.innerText = requestJson.firstname.charAt(0);
-                        document.getElementById("navbarBtn").appendChild(userBadgeDiv);
-                        //Remove signup and Login options from the user-loggedin dropdown
-                        document.querySelector(".clubbed-items .navbar-nav .dropdown-menu").innerHTML = "";
-                        document.querySelector(".clubbed-items .navbar-nav .dropdown-menu").innerHTML = `<li><button class="dropdown-item" type="button">Airbnb your home</button></li>
+                    document.querySelector("#userLogin .container #registerForm").addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        let requestJson = {
+                            "firstname": document.getElementsByName("firstname")[0].value,
+                            "lastname": document.getElementsByName("lastname")[0].value,
+                            "email": document.getElementsByName("email")[0].value,
+                            "dob": document.getElementsByName("dob")[0].value,
+                            "password": document.getElementsByName("password")[0].value
+                        }
+                        //POST call from form input
+                        let fetchResult = fetch("http://localhost:3000/register", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(requestJson)
+                        });
+
+                        fetchResult.then(res => res.json()).then((response) => {
+                            document.getElementById("userLogin").style.display = "none";
+                            document.querySelector('.main').style.opacity = "1";
+                            document.querySelector(".bi-person-circle").remove();
+                            //Add username's first name's first character as a badge
+                            let userBadgeDiv = document.createElement("div");
+                            userBadgeDiv.setAttribute("class", "circle");
+                            let userSpan = document.createElement("span");
+                            userSpan.setAttribute("class", "circle__content");
+                            userBadgeDiv.appendChild(userSpan);
+                            userSpan.innerText = requestJson.firstname.charAt(0);
+                            document.getElementById("navbarBtn").appendChild(userBadgeDiv);
+                            //Remove signup and Login options from the user-loggedin dropdown
+                            document.querySelector(".clubbed-items .navbar-nav .dropdown-menu").innerHTML = "";
+                            document.querySelector(".clubbed-items .navbar-nav .dropdown-menu").innerHTML = `<li><button class="dropdown-item" type="button">Airbnb your home</button></li>
                 <li><button class="dropdown-item" type="button">Host an experience</button></li>
                 <li><button class="dropdown-item" type="button">Help</button></li>`
 
+                        })
+
                     })
 
-                })
-
-            }        
-        }).catch((e) => {
-            console.log(e);
-        })
+                }
+            }).catch((e) => {
+                console.log(e);
+            })
         })
     }
 });
 document.querySelectorAll(".nav-dropdown >li >button")[1].addEventListener("click", () => {
-    document.getElementById("userLogin").style.display = "block";
-    document.querySelector('.main').style.opacity = "0.5";
-    //For toggling Email and Phone login
-    if (document.getElementById("EmailLogin")!=null){
-        document.getElementById("EmailLogin").addEventListener('click', (e) => {
-        e.preventDefault();
-        document.querySelectorAll("#userLogin > .container > form > .form-floating")[0].style.display = "none";
-        document.querySelectorAll("#userLogin > .container > form > .form-floating")[1].style.display = "none";
-        document.querySelectorAll("#userLogin > .container > form > .form-floating")[2].style.display = "block";
-        document.querySelectorAll("#userLogin > .container > .login-alt")[4].style.display = "block";
-        document.querySelectorAll("#userLogin > .container > .login-alt")[3].style.display = "none";
-        });
-    }
-    if (document.getElementById("PhoneLogin")!=null){
-        document.getElementById("PhoneLogin").addEventListener('click', (e) => {
-        e.preventDefault();
-        document.querySelectorAll("#userLogin > .container > form > .form-floating")[2].style.display = "none";
-        document.querySelectorAll("#userLogin > .container > form > .form-floating")[0].style.display = "block";
-        document.querySelectorAll("#userLogin > .container > form > .form-floating")[1].style.display = "block";
-
-        document.querySelectorAll("#userLogin > .container > .login-alt")[4].style.display = "none";
-        document.querySelectorAll("#userLogin > .container > .login-alt")[3].style.display = "block";
-
-        });
-    }
-    //Ajax handling for Login/Signup form
-    document.getElementById("loginSignupForm").addEventListener('submit', (e) => {
-        e.preventDefault();
-
-        let requestJson = {
-            "countryCode": document.getElementsByName("countryCode")[0].value,
-            "email": document.getElementsByName("email")[0].value,
-            "phoneNumber": document.getElementsByName("phoneNumber")[0].value
-        }
-        //POST call from form input
-        let fetchResult = fetch("http://localhost:3000/auth", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(requestJson)
-        });
-
-        fetchResult.then(res => res.json()).then((response) => {
-
-            if ((response.email != undefined || response.phone != undefined) && (response.email == requestJson.email || response.phone.substring(4) == requestJson.phoneNumber)) {
-                document.getElementById("userLogin").style.display = "none";
-                //Remove default icon
-                document.querySelector(".bi-person-circle").remove();
-                //Add username's first name's first character as a badge
-                let userBadgeDiv = document.createElement("div");
-                userBadgeDiv.setAttribute("class", "circle");
-                let userSpan = document.createElement("span");
-                userSpan.setAttribute("class", "circle__content");
-                userBadgeDiv.appendChild(userSpan);
-                userSpan.innerText = response.firstname.charAt(0);
-                document.getElementById("navbarBtn").appendChild(userBadgeDiv);
-                //Set the background opacity to original
-                document.querySelector('.main').style.opacity = "1";
-                //Remove signup and Login options from the user-loggedin dropdown
-                document.querySelector(".clubbed-items .navbar-nav .dropdown-menu").innerHTML = "";
-                document.querySelector(".clubbed-items .navbar-nav .dropdown-menu").innerHTML = `<li><button class="dropdown-item" type="button">Airbnb your home</button></li>
-            <li><button class="dropdown-item" type="button">Host an experience</button></li>
-            <li><button class="dropdown-item" type="button">Help</button></li>`
-
-            } else {
-                document.querySelector("#userLogin .header .headText").remove();
-                let header = document.createElement("h5");
-                header.classList = "text-center headText mt-2";
-                header.innerHTML = "Finish signing up";
-
-                document.querySelector("#userLogin .header").appendChild(header);
-
-                document.querySelector("#userLogin .container").innerHTML = `<form id="registerForm">
-            <div class="form-floating">
-              <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="firstname">
-              <label for="floatingInput">First name</label>
-            </div>
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="lastname">
-              <label for="floatingInput">Last name</label>
-              <div id="helpText" class="form-text">Make sure it matches the name on your government ID.</div>
-            </div>
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="dob">
-              <label for="floatingInput">Date of birth</label>
-              <div id="helpText" class="form-text">To sign up, you need to be at least 18. Your birthday won’t be shared with other people who use Airbnb.</div>
-            </div>
-            <div class="form-floating mb-3">
-              <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="email">
-              <label for="floatingInput">Email</label>
-              <div id="helpText" class="form-text">We'll email you trip confirmations and receipts.</div>
-            </div>
-            <div class="form-floating mb-3">
-              <input type="password" class="form-control" id="floatingInput" placeholder="name@example.com" name="password">
-              <label for="floatingInput">Password</label>
-              <div id="helpText" class="form-text">By selecting Agree and continue, I agree to Airbnb’s Terms of Service, Payments Terms of Service, and Nondiscrimination Policy and acknowledge the Privacy Policy.</div>
-            </div>
-            <div class="mb-4">
-              <button class="btn" id="authSubmit">Agree and continue</button>
-            </div>
-            <hr>
-            <div id="helpText" class="form-text mb-2">
-              Airbnb will send you members-only deals, inspiration, marketing emails, and push notifications. You can opt out of receiving these at any time in your account settings or directly from the marketing notification.
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-              <label class="form-check-label" id="check-label" for="flexCheckDefault">I dont want to receive marketing messages from Airbnb.</label>
-            </div>
-          </form>`;
-
-                document.getElementsByName("email")[0].value = requestJson.email;
-                document.querySelector("#userLogin .container #registerForm").addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    let requestJson = {
-                        "firstname": document.getElementsByName("firstname")[0].value,
-                        "lastname": document.getElementsByName("lastname")[0].value,
-                        "email": document.getElementsByName("email")[0].value,
-                        "dob": document.getElementsByName("dob")[0].value,
-                        "password": document.getElementsByName("password")[0].value
-                    }
-                    //POST call from form input
-                    let fetchResult = fetch("http://localhost:3000/register", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify(requestJson)
-                    });
-
-                    fetchResult.then(res => res.json()).then((response) => {
-                        document.getElementById("userLogin").style.display = "none";
-                        document.querySelector('.main').style.opacity = "1";
-                        document.querySelector(".bi-person-circle").remove();
-                        //Add username's first name's first character as a badge
-                        let userBadgeDiv = document.createElement("div");
-                        userBadgeDiv.setAttribute("class", "circle");
-                        let userSpan = document.createElement("span");
-                        userSpan.setAttribute("class", "circle__content");
-                        userBadgeDiv.appendChild(userSpan);
-                        userSpan.innerText = requestJson.firstname.charAt(0);
-                        document.getElementById("navbarBtn").appendChild(userBadgeDiv);
-                        //Remove signup and Login options from the user-loggedin dropdown
-                        document.querySelector(".clubbed-items .navbar-nav .dropdown-menu").innerHTML = "";
-                        document.querySelector(".clubbed-items .navbar-nav .dropdown-menu").innerHTML = `<li><button class="dropdown-item" type="button">Airbnb your home</button></li>
-            <li><button class="dropdown-item" type="button">Host an experience</button></li>
-            <li><button class="dropdown-item" type="button">Help</button></li>`
-
-                    })
-
-                })
-
-            }
-        }).catch((e) => {
-            console.log(e);
-        })
-    })
+    document.querySelectorAll(".nav-dropdown >li >button")[0].click();
 });
+
 //Upon clicking on Airbnb your home button
 if (document.getElementById("you-earn") != null) {
     document.getElementById("you-earn").addEventListener("click", () => {
@@ -1043,6 +910,7 @@ if (document.getElementById("you-earn") != null) {
                         });
 
                         fetchResult.then(res => res.json()).then((response) => {
+                            location.href = `http://localhost:3000/host?email=${requestJson.email}&phone=${requestJson.phone}`;
                             document.getElementById("userLogin").style.display = "none";
                             document.querySelector('.main').style.opacity = "1";
                             document.querySelector(".bi-person-circle").remove();
@@ -1065,20 +933,20 @@ if (document.getElementById("you-earn") != null) {
                     })
 
                     document.querySelector("#userLogin > div.mb-2 > div > button").addEventListener('click', () => {
-                   
+
                         document.querySelector("#userLogin .header .headText").remove();
                         document.querySelector("#userLogin .header button").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x"
                             viewBox="0 0 16 16">
                             <path
                             d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
                         </svg>`;
-                let header = document.createElement("h5");
-                header.classList = "text-center headText mt-2";
-                header.innerHTML = "Login or signup";
-    
-                document.querySelector("#userLogin .header").appendChild(header);
-       
-                document.querySelector("#userLogin .container").innerHTML = `<h4 class="mb-4">Welcome to Airbnb</h4>
+                        let header = document.createElement("h5");
+                        header.classList = "text-center headText mt-2";
+                        header.innerHTML = "Login or signup";
+
+                        document.querySelector("#userLogin .header").appendChild(header);
+
+                        document.querySelector("#userLogin .container").innerHTML = `<h4 class="mb-4">Welcome to Airbnb</h4>
                             <form id="loginSignupForm">
                             <div class="form-floating">
                                 <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="countryCode">
@@ -1403,6 +1271,44 @@ if (document.getElementById("you-earn") != null) {
             })
         })
 
+    })
+}
+
+document.querySelectorAll(".nav-dropdown >li >button")[2].addEventListener("click", () => {
+    document.getElementById("you-earn").click();
+})
+
+if (document.getElementById("expandfooter") != null) {
+
+    document.getElementById("expandfooter").addEventListener('click', () => {
+
+        let element = document.getElementById("footerLinkSection");
+        element.style.display = "block";
+        element.style.position = "sticky";
+        element.style.bottom = "5%";
+        element.style.transition = "ease-in;"
+        element.style.transitionDelay = "3s";
+        element.style.zIndex = "10";
+        element.style.backgroundColor = "white";
+        document.getElementById("expandfooter").style.display = "none";
+        document.getElementById("collapsefooter").style.display = "inline";
+        return
+    })
+}
+
+
+if (document.getElementById("collapsefooter") != null) {
+
+    document.getElementById("collapsefooter").addEventListener('click', () => {
+        let element = document.getElementById("footerLinkSection");
+        element.style.transition = "ease-down;"
+        element.style.transitionDelay = "3s";
+        element.style.zIndex = "10";
+        element.style.backgroundColor = "white";
+        element.style.display = "none";
+        document.getElementById("collapsefooter").style.display = "none";
+        document.getElementById("expandfooter").style.display = "inline";
+        return
     })
 }
 

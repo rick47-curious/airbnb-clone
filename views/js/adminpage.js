@@ -1,7 +1,11 @@
 //Alert section
 const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+
 if (location.href.includes("host")){
     document.title = "Airbnb- Host corner";
+}
+if (location.href.includes("admin")){
+    document.title = "Airbnb- Admin corner";
 }
 //Properties section
 if (!location.href.includes("users")) {
@@ -408,7 +412,7 @@ document.querySelector("#aside-menu .navigation-menu #option-1").addEventListene
     document.querySelector("#aside-menu .navigation-menu #option-2").classList = "";
 })
 
-if (!location.href.includes('host')){
+if (location.href.includes('admin')){
     document.querySelector("#aside-menu .navigation-menu #option-2").addEventListener('click',()=>{
         let currentUrl = location.href;
         if (currentUrl.includes("users")){

@@ -466,6 +466,16 @@ label{
 }
 
 /* Footer section below*/
+#footerLinkSection{
+    border: 1px solid #e6e6e6;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    cursor:pointer;
+}
+#footerLinkSection > div >div > *:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
 
 .foot{
     background-color: white;

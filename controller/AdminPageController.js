@@ -22,7 +22,8 @@ module.exports = {
         let resultResponse = await model.getUsers();
         let result = {
             response: resultResponse,
-            type:"users"
+            type:"users",
+            userType:"admin"
         }
         return result;
     },
