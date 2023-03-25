@@ -22,3 +22,7 @@ document.getElementById("PhoneLogin").addEventListener('click',(e)=>{
     
    
 });
+
+document.querySelector(".header-navigation .back-btn").addEventListener('click',()=>{
+    history.back();
+})

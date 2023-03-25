@@ -223,6 +223,12 @@ body{
     
 }
 
+.grid-container .grid-col img{
+    cursor: pointer;
+}
+.grid-container .grid-col .prop-details > *{
+    cursor: pointer;
+}
 /* Login/Signup form */
 #userLogin{
     border-radius: 1rem;

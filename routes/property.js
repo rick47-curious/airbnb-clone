@@ -15,9 +15,11 @@ app.use(express.static(path.join(__dirname, '/views/js')));
 
 app.get('/:id',async (req,res)=>{
     let propName = req.params['id'];
-    let response = await propertyPageController.fetchPropertyDetails(propName);
+    let queryCheckin = req.query['checkin'];
+    let queryCheckout = req.query['checkout'];
+    let queryGuests = req.query['guests'];
+    let response = await propertyPageController.fetchPropertyDetails(propName,queryCheckin,queryCheckout,queryGuests);
     res.render('Propertypage',response);
-
 })
 
 

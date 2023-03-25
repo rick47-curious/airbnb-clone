@@ -1,6 +1,28 @@
 //Global Json
 let globJson = {};
-
+var globSearchObj = {};
+let monthObj = {
+    "Jan": "01",
+    "Feb": "02",
+    "Mar": "03",
+    "Apr": "04",
+    "May": "05",
+    "Jun": "06",
+    "Jul": "07",
+    "Aug": "08",
+    "Sep": "09",
+    "Oct": "10",
+    "Nov": "11",
+    "Dec": "12"
+  }
+document.querySelector(".main-form-div .main-form").addEventListener('submit',()=>{
+    globSearchObj['checkin'] = document.getElementById("checkinDate").value;
+    globSearchObj['checkout'] = document.getElementById("checkoutDate").value;
+    globSearchObj['guests'] = document.getElementById('guests').value;
+    
+    window.localStorage.setItem("tempJson",JSON.stringify(globSearchObj));
+    console.log(globSearchObj);
+})
 
 document.querySelectorAll(".searchbox > *",).forEach((divElement) => {
     //Include upper nav having Stays, Experience, Online experiences upon click on any span inside
@@ -251,10 +273,10 @@ document.getElementById("navbarBtn").addEventListener('click', () => {
         document.querySelector(".nav-dropdown >li >button#directToAdmin").addEventListener('click', () => {
             location.href = "http://localhost:3000/admin";
         })
-    }else if (document.querySelector(".nav-dropdown >li >button#directToHost")){
+    } else if (document.querySelector(".nav-dropdown >li >button#directToHost")) {
         document.querySelector(".nav-dropdown >li >button#directToHost").addEventListener('click', () => {
             location.href = `http://localhost:3000/host?email=${globJson.email}&phone=${globJson.phoneNumber}`;
-    }) 
+        })
     }
 })
 
@@ -307,8 +329,8 @@ document.querySelectorAll(".nav-dropdown >li >button")[0].addEventListener("clic
                 "phoneNumber": document.getElementsByName("phoneNumber")[0].value
             }
             //Setting email and phoneNumber in global json
-            globJson['email'] = requestJson.email?requestJson.email:undefined;
-            globJson['phoneNumber'] = requestJson.phoneNumber?requestJson.phoneNumber:undefined;
+            globJson['email'] = requestJson.email ? requestJson.email : undefined;
+            globJson['phoneNumber'] = requestJson.phoneNumber ? requestJson.phoneNumber : undefined;
             //POST call from form input
             let fetchResult = fetch("http://localhost:3000/auth", {
                 method: "POST",
@@ -1312,5 +1334,56 @@ if (document.getElementById("collapsefooter") != null) {
     })
 }
 
+//Navigate to Rooms sections or property page
+document.querySelectorAll(".grid-container .grid-col").forEach(element => {
+    element.querySelector("img").addEventListener('click', () => {
+        var globSearchObj = JSON.parse(window.localStorage.getItem("tempJson"));
+        if (globSearchObj == undefined){
+            globSearchObj = reusableExecutor(element);
+        }
+        window.localStorage.setItem("secpr",element.querySelector(".prop-details > .prop-price").innerText);   
+        location.href = `http://localhost:3000/rooms/${element.querySelector("#prop_id").innerHTML}?checkin=${globSearchObj['checkin']}&checkout=${globSearchObj['checkout']}&guests=${globSearchObj['guests']}`;
+        window.localStorage.clear();
+    })
+    element.querySelector(".prop-details > p").addEventListener('click', () => {
+        var globSearchObj = JSON.parse(window.localStorage.getItem("tempJson"));
+        if (globSearchObj == undefined){
+            globSearchObj = reusableExecutor(element);
+        }
+        
+        window.localStorage.setItem("secpr",element.querySelector(".prop-details > .prop-price").innerText);
+        location.href = `http://localhost:3000/rooms/${element.querySelector("#prop_id").innerHTML}?checkin=${globSearchObj['checkin']}&checkout=${globSearchObj['checkout']}&guests=${globSearchObj['guests']}`;
+        window.localStorage.clear();
+    })
 
+    element.querySelector(".prop-details > .prop-desc").addEventListener('click',()=>{
+        var globSearchObj = JSON.parse(window.localStorage.getItem("tempJson"));
+        if (globSearchObj == undefined){
+            globSearchObj = reusableExecutor(element);
+        }
+        window.localStorage.setItem("secpr",element.querySelector(".prop-details > .prop-price").innerText);
+        location.href = `http://localhost:3000/rooms/${element.querySelector("#prop_id").innerHTML}?checkin=${globSearchObj['checkin']}&checkout=${globSearchObj['checkout']}&guests=${globSearchObj['guests']}`;
+        window.localStorage.clear();
+    })
 
+    element.querySelector(".prop-details > .prop-price").addEventListener('click',()=>{
+        var globSearchObj = JSON.parse(window.localStorage.getItem("tempJson"));
+        if (globSearchObj == undefined){
+            globSearchObj = reusableExecutor(element);
+        }
+        window.localStorage.setItem("secpr",element.querySelector(".prop-details > .prop-price").innerText);
+        location.href = `http://localhost:3000/rooms/${element.querySelector("#prop_id").innerHTML}?checkin=${globSearchObj['checkin']}&checkout=${globSearchObj['checkout']}&guests=${globSearchObj['guests']}`;
+        window.localStorage.clear();
+    })
+});
+
+function reusableExecutor(element){
+    let globSearchObj = {};
+    let modDate = element.querySelectorAll(".prop-details .prop-desc")[1].innerText;
+    let formedString = new Date().getFullYear() + "-" + monthObj[modDate.substring(8,11)] + "-" +modDate.substring(0,2);
+    globSearchObj['checkin'] = formedString;
+    formedString = new Date().getFullYear() + "-" + monthObj[modDate.substring(8,11)] + "-" +modDate.substring(5,7);
+    globSearchObj['checkout'] = formedString;
+    globSearchObj['guests'] = "1 guest";
+    return globSearchObj;
+}

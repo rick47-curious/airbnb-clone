@@ -32,7 +32,7 @@
       </nav>
     <div class="container">
         <div class="header-navigation d-flex">
-            <div style="margin-top: 0.7rem;">
+            <div style="margin-top: 0.7rem;" class="back-btn">
             <span>
                 <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-label="Back" role="img" focusable="false" style="display: block; fill: none; height: 16px; width: 16px; stroke: currentcolor; stroke-width: 3; overflow: visible;">
                     <g fill="none"><path d="m20 28-11.29289322-11.2928932c-.39052429-.3905243-.39052429-1.0236893 0-1.4142136l11.29289322-11.2928932"></path>
@@ -49,14 +49,32 @@
                     <div class="user-trip-item d-flex justify-content-between">
                         <div>
                             <div class="bold-text">Dates</div>
-                            <div class="grey-text mt-1">19-25 Mar</div>
+                            <% let checkinDay = checkinDate.split('-')[2] 
+                               let checkoutDay = checkoutDate.split('-')[2];
+                               const monthName = {
+                                01: "Jan",
+                                02: "Feb",
+                                03: "Mar",
+                                04: "Apr",
+                                05: "May",
+                                06: "Jun",
+                                07: "Jul",
+                                08: "Aug",
+                                09: "Sep",
+                                10: "Oct",
+                                11: "Nov",
+                                12: "Dec"
+                             }
+                             let finalResult = `${checkinDay}-${checkoutDay} ${monthName[parseInt(checkinDate.split('-')[1])]}`
+                            %>
+                            <div class="grey-text mt-1"><%=finalResult%></div>
                         </div>
                         <div class="text-underlined bold-text">Edit</div>
                     </div>
                     <div class="user-trip-item d-flex justify-content-between mt-4">
                         <div>
                             <div class="bold-text">Guests</div>
-                            <div class="grey-text mt-1">1 guest</div>
+                            <div class="grey-text mt-1"><%= guestDetails %></div>
                         </div>
                         <div class="text-underlined bold-text">Edit</div>
                     </div>
@@ -383,19 +401,19 @@
             <div class="price-section mt-5">
                 <div class="container d-flex justify-content-around mt-4">
                     <div class="image">
-                        <img src="https://a0.muscache.com/im/pictures/a7fc0a3d-4782-4f10-910b-cb11a4b57086.jpg?aki_policy=large" alt="" srcset="">
+                        <img src="<%= response.images.picture_url %>" alt="" srcset="">
                     </div>
                     <div class="ms-2">
-                        <span class="grey-text">Farm stay</span>
-                        <div>Brick house: 130 awata Farm stay by lake 4-6 pax</div>
+                        <span class="grey-text"><%= response.property_type %></span>
+                        <div><%= response.name %></div>
                         <div class="mt-3 d-flex">
                             <span><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star-fill star-img" viewBox="0 0 16 16">
                                 <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
                               </svg></span>
-                            <span class="grey-text">&nbsp;<span class="bold-text .small-text">4.84</span> (25 reviews)</span>
+                            <span class="grey-text">&nbsp;<span class="bold-text .small-text"><%= response.review_scores.review_scores_value%></span> (<%=response.number_of_reviews%> reviews)</span>
                             <span>&nbsp;&centerdot;</span>
                             <span class="mt-1"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true" role="presentation" focusable="false" style="display: block; height: 12px; width: 12px; fill: currentcolor;"><path d="M8.498 7.593l3.1-1.74c.5-.278.99-.552 1.474-.82a.833.833 0 0 0 .428-.729v-2.97A.833.833 0 0 0 12.667.5H3.333a.833.833 0 0 0-.833.833v2.97c0 .303.164.582.428.729l3 1.675 1.575.886c.348.195.647.195.995-.001zM8 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z"></path></svg></span>
-                            <span class="grey-text">&nbsp;Superhost</span>
+                            <span class="grey-text">&nbsp;<%= response.host.host_is_superhost?"Superhost":"Verified" %></span>
                         </div>
                     </div>
                 </div>
@@ -408,20 +426,29 @@
                     <div class="h4 mt-3 ms-3">Price details</div>
                     <div class="pricing-details mx-3 mt-4">
                         <div class="d-flex justify-content-between mt-2">
-                           <div class="text-underlined grey-text price-text">$11200 X 6 nights</div>
-                           <div class="grey-text price-text">$67000</div>
+                            <% const date1 = new Date(checkinDate);
+                            const date2 = new Date(checkoutDate);
+                            const diffTime = Math.abs(date2 - date1);
+                            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                            %>
+                           <div class="text-underlined grey-text price-text">$<%= response.price %> X <%=diffDays%> nights</div>
+                           <% const priceRate = parseInt(response.price) * parseInt(diffDays) %>
+                           <div class="grey-text price-text">$<%=priceRate%></div>
                         </div>
                         <div class="d-flex justify-content-between mt-2">
                             <div class="text-underlined grey-text price-text">Cleaning fee</div>
-                            <div class="grey-text price-text">$750</div>
+                            <%let cleaningFee = parseInt(response.cleaning_fee!=null?response.cleaning_fee:500)%>
+                            <div class="grey-text price-text">$<%=cleaningFee%></div>
                         </div>
                         <div class="d-flex justify-content-between mt-2">
                             <div class="text-underlined grey-text price-text">Airbnb service fee</div>
-                            <div class="grey-text price-text">$9559</div>
+                            <%let serviceFee = parseInt(response.security_deposit != null? response.security_deposit : "500")%>
+                            <div class="grey-text price-text">$<%= serviceFee %></div>
                         </div>
                         <div class="d-flex justify-content-between mt-2">
                             <div class="text-underlined grey-text price-text">Taxes</div>
-                            <div class="grey-text price-text">$12,231</div>
+                            <% const tax = Math.ceil((priceRate + cleaningFee + serviceFee)*0.12) %>
+                            <div class="grey-text price-text">$<%=tax%></div>
                         </div>
                     </div>
                 </div>
@@ -429,7 +456,7 @@
                 <div class="container mt-3">
                     <div class="d-flex justify-content-between mx-3">
                         <div class="bold-text">Total (dollars)</div>
-                        <div class="bold-text">$80,000</div>
+                        <div class="bold-text">$<%=(priceRate + cleaningFee + serviceFee + tax)%></div>
                     </div>
                 </div>
             </div>

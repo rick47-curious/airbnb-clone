@@ -109,12 +109,19 @@
             <div class="col-2 inpdiv field">
               <span id="seperator-1"></span>
               <label for="checkinDate">Check in</label>
-              <input type="date" class="calender-input" id="checkinDate" name="checkin">
+              <% let date = new Date();
+                 let mincheckinDateString = `${date.getFullYear()}-${(date.getMonth()+1)<10?`0${(date.getMonth()+1)}`:(date.getMonth()+1)}-${date.getDate()}`; 
+                 let maxDateString = `${date.getFullYear()}-${(date.getMonth()+1)<10?`0${(date.getMonth()+1)}`:(date.getMonth()+1)}-30`;
+              %>
+              <input type="date" class="calender-input" id="checkinDate" name="checkin" min=<%=mincheckinDateString%> max=<%= maxDateString %>>
             </div>
             <div class="col-2 field inpdiv">
               <span id="seperator-2"></span>
               <label for="checkoutDate">Check out</label>
-              <input type="date" class="calender-input" id="checkoutDate" name="checkout">
+              <%
+                 let minDateString = `${date.getFullYear()}-${(date.getMonth()+1)<10?`0${(date.getMonth()+1)}`:(date.getMonth()+1)}-${date.getDate()+1}`;
+              %>
+              <input type="date" class="calender-input" id="checkoutDate" name="checkout" min=<%=minDateString%> max=<%= maxDateString %>>
             </div>
             <div class="col-4 field">
               <span id="seperator-3"></span>
@@ -240,25 +247,38 @@
             </p>
             <p class="prop-desc"><%= Math.ceil((Math.random())*1000)  %> Kilometres away</p>
             <p class="prop-desc">
-              <% const currentDate = new Date();
+              <% 
+              const currentDate = new Date();
               const currentDay = currentDate.getUTCDate();
               const currentMonth = currentDate.getUTCMonth()+1;
               const monthName = {
-                  1: "Jan",
-                  2: "Feb",
-                  3: "Mar",
-                  4: "Apr",
-                  5: "May",
-                  6: "Jun",
-                  7: "Jul",
-                  8: "Aug",
-                  9: "Sep",
-                  10: "Oct",
-                  11: "Nov",
-                  12: "Dec"
+                                1: "Jan",
+                                2: "Feb",
+                                3: "Mar",
+                                4: "Apr",
+                                5: "May",
+                                6: "Jun",
+                                7: "Jul",
+                                8: "Aug",
+                                9: "Sep",
+                                10: "Oct",
+                                11: "Nov",
+                                12: "Dec"
               }
-              const modifiedString = currentDay==30 || currentDay==31 || currentMonth==2 ? `1 - ${1+Math.ceil(Math.random()*10)} ${monthName[currentMonth+1]}`: `${currentDay} - ${currentDay + Math.ceil(Math.random()*10)} ${monthName[currentMonth+1]}` ;  %>
-              <%= modifiedString %>
+              let finalString = "";
+              let modifiedDate = 0;
+              if (currentDay<20){
+                  modifiedDate = Math.ceil(currentDay + (Math.random())*10);
+              }else if (currentDay >=20 && currentDay <25){
+                  modifiedDate = currentDay + Math.ceil((Math.random())*5);
+              }else if (currentDay >=25 && currentDay<28){
+                modifiedDate = currentDay  +Math.ceil((Math.random())*2);
+              }else if (currentDay>=28){
+                  modifiedDate = Math.ceil(Math.random()*5);
+              }
+              
+              finalString = `${currentDay>=28?1:currentDay} - ${modifiedDate} ${currentDay>=28?monthName[currentMonth+1]:monthName[currentMonth]}`%>
+              <%= finalString %>
             </p>
             <p class="prop-price">$<%= response[index].price%> <span class="no-style">night</span></p>
           </div>

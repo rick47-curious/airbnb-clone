@@ -300,3 +300,42 @@ elementDropdownButtonArea.forEach((element, key) => {
         document.querySelector(".dropdown-selection button").innerHTML = userChoice;
     })
 });
+
+let tempJson = {};
+
+document.getElementById("checkinDate").addEventListener('change',()=>{
+    reusablePriceCheck(tempJson);
+    localStorage.setItem('key',JSON.stringify(tempJson));
+})
+
+document.getElementById("checkoutDate").addEventListener('change',()=>{
+    reusablePriceCheck(tempJson);
+    localStorage.setItem('key',JSON.stringify(tempJson));
+})
+//Navigate to Bookings page
+document.querySelector(".reservation-area .rsvsub-btn").addEventListener('click',()=>{
+        let modifiedURL = location.href.split('?')[0].replace('rooms','book');
+        let json = JSON.parse(localStorage.getItem('key'));
+        let params;
+        if (json == undefined){
+            let params = location.href.split('?')[1];
+            location.href = modifiedURL +"?"+params;
+            
+        }else{
+           let params = `checkin=${json['checkin']}&checkout=${json['checkout']}&guests=${json['guests']}`;
+           location.href = modifiedURL +"?"+params;
+           localStorage.clear();
+        }   
+})
+
+function reusablePriceCheck(tempJson){
+    tempJson['checkin'] = document.getElementById('checkinDate').value;
+    tempJson['checkout'] = document.getElementById('checkoutDate').value;
+    tempJson['guests'] = document.querySelector(".dropdown-selection button").innerHTML;
+    const date1 = new Date(tempJson['checkin']);
+    const date2 = new Date(tempJson['checkout']);
+    const diffTime = Math.abs(date2 - date1);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    document.getElementById("diffDate").innerHTML = diffDays;
+    document.getElementById("priceSection").innerHTML =`$ ${parseInt(document.getElementById("originalRate").innerHTML) * parseInt(document.getElementById("diffDate").innerHTML)}`;
+}

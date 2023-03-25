@@ -16,7 +16,8 @@ module.exports = {
         let adultCount = queryGuests[0];
         let havingPets = queryGuests[2]==null?false:true;
         const result = {
-            result: await homePageModel.fetchSearchedResult(parameters.location,adultCount.charAt(0),havingPets)
+            response: await homePageModel.fetchSearchedResult(parameters.location,adultCount.charAt(0),havingPets),
+            type: "properties"
         }
 
         return result;
