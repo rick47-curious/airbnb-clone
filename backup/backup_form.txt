@@ -255,6 +255,10 @@
           <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="email">
           <label for="floatingInput">Email</label>
         </div>
+        <div class="form-floating mb-3">
+          <input type="password" class="form-control" id="floatingInput" placeholder="name@example.com" name="password">
+          <label for="floatingInput">Password</label>
+        </div>
         <div class="mb-4">
           <button class="btn" id="authSubmit">Continue</button>
         </div>

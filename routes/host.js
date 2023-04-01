@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const app = express.Router();
+const { userValidationRules, validate } = require('../middleware/validator');
 const homePageController = require('../controller/HomePageController');
 const adminPageController = require('../controller/AdminPageController');
 const hostPageController = require('../controller/HostPageController');
@@ -22,13 +23,22 @@ app.get('/',async (req,res)=>{
 app.post('/authenticate',async (req,res)=>{
     let result = await homePageController.authenticateUser(req.body);
     if (result.length!=0){
-        res.send(result[0]);
+        if (result[0].password != req.body.password) {
+            res.status(400).json({"errors":{
+                status:400,
+                message: "Invalid Password"
+             }
+            })
+            return
+        }else{
+           res.send(result[0]);
+        }
     }else{
         res.send({});
     }  
 })
 
-app.post('/register',async (req,res)=>{
+app.post('/register',userValidationRules(),validate,async (req,res)=>{
 
     let response = await homePageController.addUser(req.body);
 
