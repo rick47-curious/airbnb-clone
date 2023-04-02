@@ -30,7 +30,7 @@ exports.fetchSearchedResult = async (location,guestCount,havingpets)=>{
     } catch (error) {
         console.log(error);
     }finally{
-        await client.close();
+        
     }
 }
 
@@ -48,7 +48,7 @@ exports.authenticateUserDB = async(reqemail,reqphone)=>{
     } catch (error) {
         console.log(error);
     }finally{
-        await client.close();
+        
     }
 }
 
@@ -61,7 +61,7 @@ exports.insertUser = async (request)=>{
     } catch (error) {
         console.log(error);
     }finally{
-       await client.close();
+       
     }
 }
 
@@ -74,7 +74,7 @@ exports.addProperty = async(request)=>{
     } catch (error) {
         console.log(error);
     }finally{
-        await client.close();
+        
     }
 }
 
@@ -88,7 +88,7 @@ exports.updateProperty = async(filter,request)=>{
     } catch (error) {
         console.log(error);
     }finally{
-        await client.close();
+        
     }
 }
 
@@ -101,7 +101,7 @@ exports.getProperty = async (filter)=>{
     } catch (error) {
         console.log(error);
     }finally{
-        await client.close();
+        
     }
 }
 
@@ -114,7 +114,7 @@ exports.deleteProperty = async(filter)=>{
     } catch (error) {
         console.log(error);
     }finally{
-        await client.close();
+        
     }
 }
 exports.getUsers = async()=>{
@@ -126,7 +126,7 @@ exports.getUsers = async()=>{
     } catch (error) {
         console.log(error);
     }finally{
-        await client.close();
+        
     }
 }
 exports.addUserToDB = async(request)=>{
@@ -138,7 +138,7 @@ exports.addUserToDB = async(request)=>{
     } catch (error) {
         console.log(error);
     }finally{
-        await client.close();
+        
     }
 }
 
@@ -151,7 +151,7 @@ exports.deleteUser = async (filter)=>{
     } catch (error) {
         console.log(error);
     }finally{
-        await client.close();
+        
     }
 }
 
@@ -164,6 +164,6 @@ exports.getHostProperties = async(filter)=>{
     } catch (error) {
         console.log(error);
     }finally{
-        await client.close();
+        
     }
 }

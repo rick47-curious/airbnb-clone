@@ -45,7 +45,47 @@ const userValidationRules = () => {
   ]
 }
 
+const formValidationRules = ()=>{
+  return [
+    check('name')
+    .not().isEmpty().withMessage("Property name is required")
+    .not().isNumeric().withMessage("Enter valid property name"),
+
+    check('address.market')
+    .not().isEmpty().withMessage("Nearest area or suburb name is required"),
+
+    check('address.country')
+    .not().isEmpty().withMessage("Country name is required"),
+
+    check('accommodates')
+    .not().isEmpty().withMessage("Accomodation limit is required")
+    .isNumeric().withMessage("Only Numeric value allowed for accomodation"),
+
+    check('images.picture_url')
+    .not().isEmpty().withMessage("Image location cannot be empty")
+    .isURL().withMessage("Please enter a image URL"),
+
+    check('price')
+    .not().isEmpty().withMessage("Price is required")
+    .isNumeric().withMessage("Only Numeric value allowed for price"),
+
+  ]
+}
+
 const validate = (req, res, next) => {
+  const errors = validationResult(req)
+  if (errors.isEmpty()) {
+    return next()
+  }
+  const extractedErrors = []
+  errors.array().map(err => extractedErrors.push({ [err.param]: err.msg }))
+
+  return res.status(400).json({
+    errors: extractedErrors,
+  })
+}
+
+const validateForm = (req,res,next)=>{
   const errors = validationResult(req)
   if (errors.isEmpty()) {
     return next()
@@ -75,4 +115,6 @@ const isValidDate = (dob)=>{
 module.exports = {
   userValidationRules,
   validate,
+  formValidationRules,
+  validateForm
 }

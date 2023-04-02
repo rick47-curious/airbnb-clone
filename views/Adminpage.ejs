@@ -59,7 +59,7 @@
               </div>
             </div>
           </nav>
-          <div id="liveAlertPlaceholder"></div>
+          <div id="liveAlertPlaceholder" class="fixed-top"></div>
         <aside id="aside-menu">
             <h3 class="h3 nav-header">Navigation Panel</h3>
             <ul class="navigation-menu">
@@ -109,7 +109,7 @@
                         <div class="col pt-2 d-flex justify-content-evenly">
                             <div><%= response[index].review_scores.review_scores_value %></div>
                             <div class="clubbed-container">
-                                <button class="btn btn-secondary edit-prop">Edit</button>
+                                <button class="btn btn-secondary edit-prop" onclick="editForm()">Edit</button>
                                 <button class="btn btn-danger rev-prop">Delete</button>
                             </div>
                         </div>
@@ -178,7 +178,7 @@
                 </button>
                 <h5 class="text-center headText">Add property</h5>
               </div>
-            <form action="" method="" id="propertyForm">
+            <form id="propertyForm" onsubmit="submitForm()">
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="floatingInput" placeholder="" name="propname">
                     <label for="floatingInput">Property Name</label>
@@ -196,7 +196,7 @@
                     <label for="floatingInput">Accomodation</label>
                   </div>
                   <div class="form-floating mb-3">
-                    <input type="url" class="form-control" id="floatingInput" placeholder="" name="imageUrl">
+                    <input type="text" class="form-control" id="floatingInput" placeholder="" name="imageUrl">
                     <label for="floatingInput">Property Image</label>
                   </div>
                   <div class="form-floating mb-3">
@@ -208,7 +208,7 @@
                     <label for="floatingInput">Review</label>
                   </div>
                   <div class="mb-4">
-                    <button type="submit" class="btn formbutton" id="authSubmit">Add</button>
+                    <button class="btn formbutton" id="authSubmit">Add</button>
                   </div>
             </form>
         </div>
@@ -230,7 +230,7 @@
                 </button>
                 <h5 class="text-center headText">Add User</h5>
               </div>
-            <form action="" method="" id="propertyForm">
+            <form id="propertyForm">
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="floatingInput" placeholder="" name="firstname">
                     <label for="floatingInput">FirstName</label>
@@ -269,7 +269,6 @@
         integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
         crossorigin="anonymous"></script>
     <!-- Include External script -->
-  <script src="/js/homepage.js"></script>
   <script src="/js/adminpage.js"></script>
 </body>
 

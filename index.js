@@ -51,8 +51,12 @@ app.post('/auth',async (req,res)=>{
             res.json(jsonArrayRespose[0]);    
         }
     }else{
-        //Todo : Handle if no response, send no user response and handle it in homePage.js file
-        res.json({});    
+        res.status(404).json({"errors":{
+            status:400,
+            message: "User Not Found!"
+        }
+
+        })    
     }
 })
 
