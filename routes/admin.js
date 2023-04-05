@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const app = express.Router();
-const {formValidationRules,validateForm} = require('../middleware/validator');
+const {formValidationRules,validateForm,userFormValidation,validateUserDetails} = require('../middleware/validator');
 const homePageController = require('../controller/HomePageController');
 const adminPageController = require('../controller/AdminPageController');
 app.use(express.urlencoded({ extended: true }));
@@ -48,7 +48,7 @@ app.get('/users', async (req, res) => {
     res.render('Adminpage', response);
 })
 
-app.post('/users/addUser', async (req, res) => {
+app.post('/users/addUser', userFormValidation(),validateUserDetails,async (req, res) => {
     let response = await adminPageController.addUser(req.body);
     res.json(response);
 })

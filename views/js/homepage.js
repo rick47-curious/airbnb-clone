@@ -290,7 +290,6 @@ if (document.getElementById("loginSignupForm") != null) {
         //Handling closing of the login/signup page
         document.querySelector("#userLogin > div > .header > .close-btn").addEventListener('click', (e) => {
             e.preventDefault();
-            console.log("Close btn clicked!")
             document.getElementById("userLogin").style.display = "none";
             document.querySelector('.main').style.opacity = "1";
         })

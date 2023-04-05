@@ -69,6 +69,7 @@ exports.addProperty = async(request)=>{
     let output;
     try {
         await client.connect();
+        request.price = Decimal128.fromString(request.price);
         output = await client.db('sample_airbnb').collection('listingsAndReviews').insertOne(request);
         return output;
     } catch (error) {
