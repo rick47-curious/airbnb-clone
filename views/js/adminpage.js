@@ -7,6 +7,125 @@ if (location.href.includes("host")){
 if (location.href.includes("admin")){
     document.title = "Airbnb- Admin corner";
 }
+
+function invokeSubmit(){
+    document.getElementById("propertyForm").dispatchEvent(new CustomEvent('submit'));
+    document.getElementById("propertyForm").addEventListener('submit',(e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        submitForm();
+    },{once:true})
+}
+
+  // Form submisssion
+  function submitForm(){
+    let requestBody = {
+        "name": document.getElementsByName("propname")[0].value,
+        "address": {
+            "market": document.getElementsByName("address")[0].value,
+            'country': document.getElementsByName("country")[0].value
+        },
+        "accommodates": document.getElementsByName("accomodation")[0].value,
+        "images": {
+            "picture_url": document.getElementsByName("imageUrl")[0].value
+        },
+        "price": document.getElementsByName("price")[0].value,
+        "reveiw_scores": {
+            "review_scores_value": document.getElementsByName("review")[0].value
+        }
+
+    }
+    if (location.href.includes("/host")){
+        fetch('/host/addProp',{
+            method: "POST",
+            headers:{
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody)
+        }).then(res => res.json()).then(response=>{
+            if (response.errors){
+                alertPlaceholder.appendChild(alertBadAuthentication(response));
+                return
+            }
+            alertPlaceholder.appendChild(alert("Success! admin has been informed about the property addition request"));
+        })
+    }
+    if (location.href.includes("/admin")){
+        let fetchedResult = fetch('/admin/addProperty', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(requestBody)
+        });
+
+        fetchedResult.then(res => res.json()).then((response) => {
+            if (response.errors){
+                alertPlaceholder.appendChild(alertBadAuthentication(response));
+                return
+            }
+            document.querySelector(".add-prop-dialog").style.display = "none";
+            document.querySelector(".navbar").style.opacity = "1";
+            document.getElementById("aside-menu").style.opacity = "1";
+            document.querySelector(".grid-display").style.opacity = "1";
+
+            //Add row to the table view
+            let addedRow = document.createElement("div");
+            addedRow.classList = "row result-row";
+
+            //Individual columns
+            let column1 = document.createElement("div");
+            column1.classList = "col pt-2 prop-name";
+            column1.innerHTML = requestBody.name;
+
+            let column2 = document.createElement("div");
+            column2.classList = "col pt-2";
+            column2.innerHTML = requestBody.address.market;
+
+            let column3 = document.createElement("div");
+            column3.classList = "col pt-2";
+            column3.innerHTML = requestBody.address.country;
+
+            let column4 = document.createElement("div");
+            column4.classList = "col pt-2";
+            column4.innerHTML = requestBody.accommodates;
+
+            let column5 = document.createElement("div");
+            column5.classList = "col pt-2";
+            column5.innerHTML = requestBody.price;
+
+            let column6 = document.createElement("div");
+            column6.classList = "col pt-2 d-flex justify-content-evenly";
+            let priceDiv = document.createElement("div");
+            priceDiv.innerHTML = requestBody.review_scores.review_scores_value;
+            column6.appendChild(priceDiv);
+            let clubbedButtons = document.createElement("div");
+            clubbedButtons.classList - "clubbed-container";
+            clubbedButtons.innerHTML = `<button class="btn btn-secondary edit-prop">Edit</button>
+        <button class="btn btn-danger rev-prop">Delete</button>`;
+            column6.appendChild(clubbedButtons);
+
+            addedRow.appendChild(column1);
+            addedRow.appendChild(column2);
+            addedRow.appendChild(column3);
+            addedRow.appendChild(column4);
+            addedRow.appendChild(column5);
+            addedRow.appendChild(column6);
+
+            //Add the new row at end
+            document.querySelector(".grid-display .container .result").appendChild(addedRow);
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+    
+    document.querySelector(".add-prop-dialog").style.display = "none";
+    document.querySelector(".navbar").style.opacity = "1";
+    document.getElementById("aside-menu").style.opacity = "1";
+    document.querySelector(".grid-display").style.opacity = "1";
+    
+ }
+
 //Properties section
 if (!location.href.includes("users")) {
     document.querySelector(".header .add-prop").addEventListener('click', () => {
@@ -40,122 +159,8 @@ if (!location.href.includes("users")) {
         })
 
     })
-
-    // Form submisssion
-    function submitForm(){
-        document.getElementById("propertyForm").addEventListener("submit", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        let requestBody = {
-            "name": document.getElementsByName("propname")[0].value,
-            "address": {
-                "market": document.getElementsByName("address")[0].value,
-                'country': document.getElementsByName("country")[0].value
-            },
-            "accommodates": document.getElementsByName("accomodation")[0].value,
-            "images": {
-                "picture_url": document.getElementsByName("imageUrl")[0].value
-            },
-            "price": document.getElementsByName("price")[0].value,
-            "reveiw_scores": {
-                "review_scores_value": document.getElementsByName("review")[0].value
-            }
-
-        }
-        if (location.href.includes("/host")){
-            fetch('/host/addProp',{
-                method: "POST",
-                headers:{
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(requestBody)
-            }).then(res => res.json()).then(response=>{
-                if (response.errors){
-                    alertPlaceholder.appendChild(alertBadAuthentication(response));
-                    return
-                }
-                alertPlaceholder.appendChild(alert("Success! admin has been informed about the property addition request"));
-            })
-        }
-        if (location.href.includes("/admin")){
-            let fetchedResult = fetch('/admin/addProperty', {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(requestBody)
-            });
-
-            fetchedResult.then(res => res.json()).then((response) => {
-                if (response.errors){
-                    alertPlaceholder.appendChild(alertBadAuthentication(response));
-                    return
-                }
-                document.querySelector(".add-prop-dialog").style.display = "none";
-                document.querySelector(".navbar").style.opacity = "1";
-                document.getElementById("aside-menu").style.opacity = "1";
-                document.querySelector(".grid-display").style.opacity = "1";
-
-                //Add row to the table view
-                let addedRow = document.createElement("div");
-                addedRow.classList = "row result-row";
-
-                //Individual columns
-                let column1 = document.createElement("div");
-                column1.classList = "col pt-2 prop-name";
-                column1.innerHTML = requestBody.name;
-
-                let column2 = document.createElement("div");
-                column2.classList = "col pt-2";
-                column2.innerHTML = requestBody.address.market;
-
-                let column3 = document.createElement("div");
-                column3.classList = "col pt-2";
-                column3.innerHTML = requestBody.address.country;
-
-                let column4 = document.createElement("div");
-                column4.classList = "col pt-2";
-                column4.innerHTML = requestBody.accommodates;
-
-                let column5 = document.createElement("div");
-                column5.classList = "col pt-2";
-                column5.innerHTML = requestBody.price;
-
-                let column6 = document.createElement("div");
-                column6.classList = "col pt-2 d-flex justify-content-evenly";
-                let priceDiv = document.createElement("div");
-                priceDiv.innerHTML = requestBody.review_scores.review_scores_value;
-                column6.appendChild(priceDiv);
-                let clubbedButtons = document.createElement("div");
-                clubbedButtons.classList - "clubbed-container";
-                clubbedButtons.innerHTML = `<button class="btn btn-secondary edit-prop">Edit</button>
-            <button class="btn btn-danger rev-prop">Delete</button>`;
-                column6.appendChild(clubbedButtons);
-
-                addedRow.appendChild(column1);
-                addedRow.appendChild(column2);
-                addedRow.appendChild(column3);
-                addedRow.appendChild(column4);
-                addedRow.appendChild(column5);
-                addedRow.appendChild(column6);
-
-                //Add the new row at end
-                document.querySelector(".grid-display .container .result").appendChild(addedRow);
-            }).catch((error) => {
-                console.log(error);
-            })
-        }
-        
-        document.querySelector(".add-prop-dialog").style.display = "none";
-        document.querySelector(".navbar").style.opacity = "1";
-        document.getElementById("aside-menu").style.opacity = "1";
-        document.querySelector(".grid-display").style.opacity = "1";
-        
-        },{once:true})
-    }
     //Edit or update property example - Accomodation
-    function editForm(){
-        document.querySelectorAll(".edit-prop").forEach((element) => {
+    document.querySelectorAll(".edit-prop").forEach((element) => {
         element.addEventListener("click", () => {
             document.querySelector(".add-prop-dialog .header .close-btn").addEventListener("click", (e) => {
                 e.preventDefault();
@@ -174,7 +179,7 @@ if (!location.href.includes("users")) {
             document.querySelector("#propertyForm .formbutton").innerHTML = "Edit"
             //Grabbing the name of the record to be edited
             let requiredDiv = element.parentElement.parentElement.parentElement;
-            if (location.href.includes("admin")){
+            if (location.href.includes("/admin")){
                 let fetchResult = fetch(`/admin/getProperty?name=${requiredDiv.getElementsByClassName("col")[0].innerHTML}`);
 
                 fetchResult.then(res => res.json()).then(response => {
@@ -186,13 +191,13 @@ if (!location.href.includes("users")) {
                     inputForm.querySelectorAll("div input")[3].value = response.accommodates;
                     inputForm.querySelectorAll("div input")[4].value = response.images["picture_url"];
                     inputForm.querySelectorAll("div input")[5].value = response.price["$numberDecimal"];
-                    let review = response["review_scores"];
-                    inputForm.querySelectorAll("div input")[6].value = review["review_scores_value"];
+                    let review = response["review_scores"]?response["review_scores"]:undefined;
+                    inputForm.querySelectorAll("div input")[6].value = review["review_scores_value"]?review["review_scores_value"]:"";
 
                 }).catch(error => {
                     console.log(error);
                 })
-            }else if (location.href.includes("host")){
+            }else if (location.href.includes("/host")){
                 let inputForm = document.getElementById("propertyForm");
                 let parent_row = element.parentElement.parentElement.parentElement;
                 inputForm.querySelectorAll("div input")[0].value = parent_row.querySelectorAll('.col')[0].innerHTML;
@@ -219,10 +224,10 @@ if (!location.href.includes("users")) {
                     },
                     "price": document.getElementsByName("price")[0].value,
                     "reveiw_scores": {
-                        "review_scores_value": document.getElementsByName("review")[0].value
+                        "review_scores_value": document.getElementsByName("review")[0].value?"":document.getElementsByName("review")[0].value
                     }
                 }
-                if (location.href.includes("host")){
+                if (location.href.includes("/host")){
                     document.querySelector(".add-prop-dialog").style.display = "none";
                     document.querySelector(".navbar").style.opacity = "1";
                     document.getElementById("aside-menu").style.opacity = "1";
@@ -242,9 +247,9 @@ if (!location.href.includes("users")) {
                         alertPlaceholder.appendChild(alert("Success! admin has been informed about the property edit request"));
                     })
                 }
-                if (location.href.includes("admin")){
+                if (location.href.includes("/admin")){
                     //PUT call for update
-                    let putResult = fetch('/admin', {
+                    let putResult = fetch('/admin/updateProperty', {
                         method: "PUT",
                         headers: {
                             "Content-Type": "application/json"
@@ -264,7 +269,7 @@ if (!location.href.includes("users")) {
                         document.querySelector(".grid-display").style.opacity = "1";
 
                         //Ajax call to refresh the table
-                        let result = fetch('/admin/properties', { method: "GET" });
+                        let result = fetch('/admin', { method: "GET" });
                         result.then(res => res.text()).then(response => {
                             let parser = new DOMParser();
                             let doc = parser.parseFromString(response, "text/html");
@@ -279,11 +284,10 @@ if (!location.href.includes("users")) {
                 document.querySelector(".navbar").style.opacity = "1";
                 document.getElementById("aside-menu").style.opacity = "1";
                 document.querySelector(".grid-display").style.opacity = "1";  
-            },{once:true})
+            })
 
         })
-        });
-    }
+    });
     //Delete record
     document.querySelectorAll(".rev-prop").forEach(element => {
         element.addEventListener('click', () => {

@@ -109,7 +109,8 @@
                         <div class="col pt-2 d-flex justify-content-evenly">
                             <div><%= response[index].review_scores.review_scores_value %></div>
                             <div class="clubbed-container">
-                                <button class="btn btn-secondary edit-prop" onclick="editForm()">Edit</button>
+                              <!-- onclick="invokeEdit()" -->
+                                <button class="btn btn-secondary edit-prop">Edit</button>
                                 <button class="btn btn-danger rev-prop">Delete</button>
                             </div>
                         </div>
@@ -178,7 +179,7 @@
                 </button>
                 <h5 class="text-center headText">Add property</h5>
               </div>
-            <form id="propertyForm" onsubmit="submitForm()">
+            <form id="propertyForm">
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="floatingInput" placeholder="" name="propname">
                     <label for="floatingInput">Property Name</label>
@@ -208,7 +209,7 @@
                     <label for="floatingInput">Review</label>
                   </div>
                   <div class="mb-4">
-                    <button class="btn formbutton" id="authSubmit">Add</button>
+                    <button class="btn formbutton" id="authSubmit" onclick="invokeSubmit()">Add</button>
                   </div>
             </form>
         </div>
@@ -230,7 +231,7 @@
                 </button>
                 <h5 class="text-center headText">Add User</h5>
               </div>
-            <form id="propertyForm">
+            <form id="UserForm">
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="floatingInput" placeholder="" name="firstname">
                     <label for="floatingInput">FirstName</label>
