@@ -59,7 +59,7 @@
               </div>
             </div>
           </nav>
-          <div id="liveAlertPlaceholder"></div>
+          <div id="liveAlertPlaceholder" class="fixed-top"></div>
         <aside id="aside-menu">
             <h3 class="h3 nav-header">Navigation Panel</h3>
             <ul class="navigation-menu">
@@ -73,7 +73,7 @@
         <div class="grid-display">
             <div class="header">
                 <h3 class="h3">List of Properties</h3>
-                <button class="btn btn-success add-prop">Add</button>
+                <button class="btn btn-success add-prop" onclick="invokeAddProperty()">Add</button>
             </div>
             <hr>
             <div class="container text-center">
@@ -109,8 +109,8 @@
                         <div class="col pt-2 d-flex justify-content-evenly">
                             <div><%= response[index].review_scores.review_scores_value %></div>
                             <div class="clubbed-container">
-                                <button class="btn btn-secondary edit-prop">Edit</button>
-                                <button class="btn btn-danger rev-prop">Delete</button>
+                                <button class="btn btn-secondary edit-prop" onclick="invokeEdit(this)">Edit</button>
+                                <button class="btn btn-danger rev-prop" onclick="invokeDelete(this)">Delete</button>
                             </div>
                         </div>
                     </div>    
@@ -123,7 +123,7 @@
       <div class="grid-display users-grid">
         <div class="header">
           <h3 class="h3">List of Users</h3>
-          <button class="btn btn-success add-prop">Add</button>
+          <button class="btn btn-success add-prop" onclick="invokeAddProperty()">Add</button>
         </div>
         <hr>
         <div class="container text-center">
@@ -158,7 +158,7 @@
                   <div class="col pt-2 d-flex justify-content-between">
                       <div><%= response[index].dob %></div>
                       <div class="clubbed-container">
-                          <button class="btn btn-danger users-rev rev-prop">Delete</button>
+                          <button class="btn btn-danger users-rev rev-prop" onclick="deleteUser(this)">Delete</button>
                       </div>
                   </div>
               </div>    
@@ -169,7 +169,7 @@
       </div>
         <div class="container add-prop-dialog" style="display:none">
             <div class="header">
-                <button class="btn close-btn">
+                <button class="btn close-btn" onclick="closeDialog()">
                   <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x"
                     viewBox="0 0 16 16">
                     <path
@@ -178,7 +178,7 @@
                 </button>
                 <h5 class="text-center headText">Add property</h5>
               </div>
-            <form action="" method="" id="propertyForm">
+            <form id="propertyForm">
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="floatingInput" placeholder="" name="propname">
                     <label for="floatingInput">Property Name</label>
@@ -196,7 +196,7 @@
                     <label for="floatingInput">Accomodation</label>
                   </div>
                   <div class="form-floating mb-3">
-                    <input type="url" class="form-control" id="floatingInput" placeholder="" name="imageUrl">
+                    <input type="text" class="form-control" id="floatingInput" placeholder="" name="imageUrl">
                     <label for="floatingInput">Property Image</label>
                   </div>
                   <div class="form-floating mb-3">
@@ -208,7 +208,7 @@
                     <label for="floatingInput">Review</label>
                   </div>
                   <div class="mb-4">
-                    <button type="submit" class="btn formbutton" id="authSubmit">Add</button>
+                    <button class="btn formbutton" id="authSubmit" onclick="invokeSubmit()">Add</button>
                   </div>
             </form>
         </div>
@@ -221,7 +221,7 @@
         </div>
         <div class="container" id="add-user-dialog" style="display:none">
            <div class="header">
-                <button class="btn close-btn">
+                <button class="btn close-btn" onclick="closeDialog()">
                   <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x"
                     viewBox="0 0 16 16">
                     <path
@@ -230,7 +230,7 @@
                 </button>
                 <h5 class="text-center headText">Add User</h5>
               </div>
-            <form action="" method="" id="propertyForm">
+            <form id="userForm">
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="floatingInput" placeholder="" name="firstname">
                     <label for="floatingInput">FirstName</label>
@@ -260,7 +260,7 @@
                     <label for="floatingInput">Password</label>
                   </div>
                   <div class="mb-4">
-                    <button type="submit" class="btn formbutton" id="authSubmit">Add</button>
+                    <button type="submit" class="btn formbutton" id="authSubmit" onclick="invokeUserSubmit()">Add</button>
                   </div>
             </form>
         </div>
@@ -269,7 +269,6 @@
         integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
         crossorigin="anonymous"></script>
     <!-- Include External script -->
-  <script src="/js/homepage.js"></script>
   <script src="/js/adminpage.js"></script>
 </body>
 

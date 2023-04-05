@@ -8,6 +8,7 @@ const host = require('./routes/host');
 const app = express();
 const PORT = 3000;
 const homePageController = require('./controller/HomePageController');
+const { userValidationRules, validate } = require('./middleware/validator');
 //Setting the routes
 app.use('/admin',admin);
 app.use('/rooms',property);
@@ -36,17 +37,32 @@ app.get('/search',async (req,res)=>{
 
 app.post('/auth',async (req,res)=>{
     
-    let jsonArrayRespose = await homePageController.authenticateUser(req.body); 
+    let jsonArrayRespose = await homePageController.authenticateUser(req.body);
+
     if (jsonArrayRespose.length !=0){
-        res.json(jsonArrayRespose[0]);    
+        if (jsonArrayRespose[0].password != req.body.password) {
+            res.status(400).json({"errors":{
+                status:400,
+                message: "Invalid Password"
+             }
+            })
+            return
+        }else{
+            res.json(jsonArrayRespose[0]);    
+        }
     }else{
-        res.json({});    
+        res.status(404).json({"errors":{
+            status:400,
+            message: "User Not Found!"
+        }
+
+        })    
     }
 })
 
-app.post('/register',async (req,res)=>{
+app.post('/register',userValidationRules(),validate,async (req,res)=>{
     let jsonResponse = await homePageController.addUser(req.body);
-    res.json(jsonResponse);
+    res.status(200).json(jsonResponse);
 })
 
 app.use((error,req,res,next)=>{

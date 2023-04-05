@@ -268,7 +268,7 @@ hr{
     color:#8f8d8d;
 }
 
-#authSubmit{
+#authSubmit,#registerSubmit{
     width:100%;
     background-color: #FF385C;
     padding:0.5rem;

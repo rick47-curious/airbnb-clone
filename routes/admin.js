@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const app = express.Router();
+const {formValidationRules,validateForm,userFormValidation,validateUserDetails} = require('../middleware/validator');
 const homePageController = require('../controller/HomePageController');
 const adminPageController = require('../controller/AdminPageController');
 app.use(express.urlencoded({ extended: true }));
@@ -26,12 +27,12 @@ app.get('/getProperty', async (req, res) => {
     let result = await adminPageController.getProperty({ name: updateFilter });
     res.json(result);
 })
-app.post('/addProperty', async (req, res) => {
+app.post('/addProperty',formValidationRules(),validateForm,async (req, res) => {
     let jsonResponse = await adminPageController.insertProperty(req.body);
     res.json(jsonResponse);
 })
 
-app.put('/updateProperty', async (req, res) => {
+app.put('/updateProperty', formValidationRules(),validateForm,async (req, res) => {
     let jsonResponse = await adminPageController.updateProperty({ name: updateFilter }, req.body);
     res.json(jsonResponse)
 })
@@ -47,7 +48,7 @@ app.get('/users', async (req, res) => {
     res.render('Adminpage', response);
 })
 
-app.post('/users/addUser', async (req, res) => {
+app.post('/users/addUser', userFormValidation(),validateUserDetails,async (req, res) => {
     let response = await adminPageController.addUser(req.body);
     res.json(response);
 })

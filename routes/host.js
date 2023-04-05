@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const app = express.Router();
+const {formValidationRules,validateForm } = require('../middleware/validator');
 const homePageController = require('../controller/HomePageController');
 const adminPageController = require('../controller/AdminPageController');
 const hostPageController = require('../controller/HostPageController');
@@ -19,20 +20,24 @@ app.get('/',async (req,res)=>{
     res.render('Adminpage',result);
 })
 
-app.post('/authenticate',async (req,res)=>{
-    let result = await homePageController.authenticateUser(req.body);
-    if (result.length!=0){
-        res.send(result[0]);
-    }else{
-        res.send({});
-    }  
+app.post('/addProp',formValidationRules(),validateForm,(req,res)=>{
+    res.status(201).json({
+        success: true,
+        message: "Property add request sent"
+    })
 })
 
-app.post('/register',async (req,res)=>{
-
-    let response = await homePageController.addUser(req.body);
-
-    res.send(response);
+app.put('/editProp',formValidationRules(),validateForm,(req,res)=>{
+    res.status(200).json({
+        success: true,
+        message: "Property edit request sent"
+    })
 })
 
+app.delete('/deleteProp',(req,res)=>{
+    res.status(200).json({
+        success: true,
+        message: "Property delete request sent"
+    })
+})
 module.exports = app;

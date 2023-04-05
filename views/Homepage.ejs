@@ -378,6 +378,7 @@
         <h5 class="text-center headText mt-2">Login or signup</h5>
       </div>
       <hr>
+      <div id="liveAlertPlaceholder" class="fixed-top"></div>
     </div>
     <div class="container">
       <h4 class="mb-4">Welcome to Airbnb</h4>
@@ -637,10 +638,15 @@
           <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="email">
           <label for="floatingInput">Email</label>
         </div>
+        <div class="form-floating mb-3">
+          <input type="password" class="form-control" id="floatingInput" placeholder="name@example.com" name="password">
+          <label for="floatingInput">Password</label>
+        </div>
         <div class="mb-4">
-          <button class="btn" id="authSubmit">Continue</button>
+          <button class="btn" id="authSubmit" onclick="invokeMethod()">Continue</button>
         </div>
       </form>
+      <div class="mb-4 text-center">New user ?<span id="linkRegister" style="color:#FF385C;cursor: pointer;">Register here</span></div>
       <div class="border-bottom"></div>
       <span id="small-text">or</span>
       <div class="mb-2 login-alt">
