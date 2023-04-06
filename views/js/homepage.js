@@ -317,6 +317,7 @@ if (document.getElementById("loginSignupForm") != null) {
     <div class="form-floating mb-3">
       <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="dob">
       <label for="floatingInput">Date of birth</label>
+      <div id="helpText" class="form-text">Format: MM/DD/YYYY</div>
       <div id="helpText" class="form-text">To sign up, you need to be at least 18. Your birthday won’t be shared with other people who use Airbnb.</div>
     </div>
     <div class="form-check">
@@ -765,7 +766,7 @@ function loginUser(){
         globJson['email'] = requestJson.email ? requestJson.email : undefined;
         globJson['phoneNumber'] = requestJson.phoneNumber ? requestJson.phoneNumber : undefined;
         //POST call from form input
-        let fetchResult = fetch("http://localhost:3000/auth", {
+        let fetchResult = fetch("/auth", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -821,7 +822,7 @@ let requestJson = {
     "country": document.getElementsByName("country")[0].value
 }
 //POST call from form input
-fetch("http://localhost:3000/register", {
+fetch("/register", {
     method: "POST",
     headers: {
         "Content-Type": "application/json"
@@ -971,9 +972,9 @@ document.querySelectorAll(".grid-container .grid-col").forEach(element => {
 function reusableExecutor(element){
     let globSearchObj = {};
     let modDate = element.querySelectorAll(".prop-details .prop-desc")[1].innerText;
-    let formedString = new Date().getFullYear() + "-" + monthObj[modDate.substring(8,11)] + "-" +modDate.substring(0,2);
+    let formedString = `${new Date().getFullYear()}-${monthObj[modDate.split(" ")[3]]}-${(modDate.split(" ")[0]<10)?`0${modDate.split(" ")[0]}`:modDate.split(" ")[0]}`;
     globSearchObj['checkin'] = formedString;
-    formedString = new Date().getFullYear() + "-" + monthObj[modDate.substring(8,11)] + "-" +modDate.substring(5,7);
+    formedString = `${new Date().getFullYear()}-${monthObj[modDate.split(" ")[3]]}-${(modDate.split(" ")[2]<10)?`0${modDate.split(" ")[2]}`:modDate.split(" ")[2]}`
     globSearchObj['checkout'] = formedString;
     globSearchObj['guests'] = "1 guest";
     return globSearchObj;

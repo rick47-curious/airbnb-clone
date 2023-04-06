@@ -1,9 +1,11 @@
 const express = require('express');
+const cookieParser = require('cookie-parser')
 const path = require('path');
 const app = express.Router();
 const bookingsPageController = require('../controller/BookingsPageController');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser());
 
 //Serve the public folder
 app.use(express.static('public'));
@@ -19,6 +21,7 @@ app.get('/:id',async (req,res)=>{
     let guestCount = req.query['guests'];
 
     let response = await bookingsPageController.fetchBookingsDetails(propID,checkinDate,checkoutDate,guestCount);
+    response['token'] = req.cookies["accessToken"] === undefined?"": req.cookies["accessToken"];
     res.render('Bookingspage',response);
 })
 
