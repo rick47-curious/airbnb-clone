@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 const ejs = require('ejs');
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 const admin = require('./routes/admin');
 const property = require('./routes/property')
 const booking = require('./routes/booking');
@@ -8,13 +10,13 @@ const host = require('./routes/host');
 const app = express();
 const PORT = 3000;
 const homePageController = require('./controller/HomePageController');
-const { userValidationRules, validate } = require('./middleware/validator');
+const { userValidationRules, validate, isValidLogin } = require('./middleware/validator');
 //Setting the routes
 app.use('/admin',admin);
 app.use('/rooms',property);
 app.use('/book',booking);
 app.use('/host',host);
-
+app.use(cookieParser());
 app.set('view engine','ejs');//Telling express that this engine will be used
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
@@ -35,11 +37,11 @@ app.get('/search',async (req,res)=>{
     res.render('Homepage',result);
 })
 
-app.post('/auth',async (req,res)=>{
+app.post('/auth', isValidLogin,async (req,res)=>{
     
-    let jsonArrayRespose = await homePageController.authenticateUser(req.body);
-
+    let jsonArrayRespose = await homePageController.authenticateUser(req.body);  
     if (jsonArrayRespose.length !=0){
+        const token = jwt.sign({"role":jsonArrayRespose[0].type,"name":jsonArrayRespose[0].firstname},process.env.JWT_SECRET_KEY)
         if (jsonArrayRespose[0].password != req.body.password) {
             res.status(400).json({"errors":{
                 status:400,
@@ -48,7 +50,8 @@ app.post('/auth',async (req,res)=>{
             })
             return
         }else{
-            res.json(jsonArrayRespose[0]);    
+            res.cookie("accessToken",token,{httpOnly:true}).status(200)
+            .json(jsonArrayRespose[0]);    
         }
     }else{
         res.status(404).json({"errors":{
@@ -62,7 +65,8 @@ app.post('/auth',async (req,res)=>{
 
 app.post('/register',userValidationRules(),validate,async (req,res)=>{
     let jsonResponse = await homePageController.addUser(req.body);
-    res.status(200).json(jsonResponse);
+    const token = jwt.sign({"role":req.type,"name":req.firstname},process.env.JWT_SECRET_KEY)
+    res.cookie("accessToken",token,{httpOnly:true}).status(200).json(jsonResponse);
 })
 
 app.use((error,req,res,next)=>{

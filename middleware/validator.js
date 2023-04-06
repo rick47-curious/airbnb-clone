@@ -162,11 +162,34 @@ const isValidDate = (dob)=>{
     return true
   }
 }
+
+const isValidLogin = (req,res,next)=>{
+
+  let errorCount = 0;
+
+  if (req.body.email== "" && req.body.phone == ""){
+    errorCount+=1; 
+  }else if (req.body.password == ""){
+    errorCount+=1;
+  }else if (req.body.password!="" && (req.body.email ==""||req.body.phone=="")){
+    errorCount+=1;
+  }
+
+  if (errorCount > 0){
+      return res.status(400).json({
+        errors:{status:400,
+        message: "Please enter all the inputs"}
+    });
+  }else{
+    return next();
+  }
+}
 module.exports = {
   userValidationRules,
   validate,
   formValidationRules,
   validateForm,
   userFormValidation,
-  validateUserDetails
+  validateUserDetails,
+  isValidLogin
 }
