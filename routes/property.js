@@ -22,8 +22,10 @@ app.get('/:id',async (req,res)=>{
     let queryGuests = req.query['guests'];
     let response = await propertyPageController.fetchPropertyDetails(propName,queryCheckin,queryCheckout,queryGuests);
     response['token'] = req.cookies['accessToken']
-    const result = jwt.verify(req.cookies['accessToken'],process.env.JWT_SECRET_KEY);
-    response['name'] = result.name;
+    if (response['token']){
+        const result = jwt.verify(req.cookies['accessToken'],process.env.JWT_SECRET_KEY);
+        response['name'] = result.name;
+    }
     res.render('Propertypage',response);
 })
 
