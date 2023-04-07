@@ -6,4 +6,6 @@
 - MVC
 - Ejs,JS (Front-end)
 - NodeJS/ExpressJS - (Backend)
+- Express-Validator
+- JWT
 - MongoDB (Database)
