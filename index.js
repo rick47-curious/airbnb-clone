@@ -8,7 +8,7 @@ const property = require('./routes/property')
 const booking = require('./routes/booking');
 const host = require('./routes/host');
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const homePageController = require('./controller/HomePageController');
 const { userValidationRules, validate, isValidLogin } = require('./middleware/validator');
 //Setting the routes
