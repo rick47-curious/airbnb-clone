@@ -1,5 +1,5 @@
 //Calender logic
-$(function() {
+function calender() {
     function c() {
         p();
         var e = h();
@@ -114,7 +114,8 @@ $(function() {
             r("next")
         }
     })
-})
+}
+calender();
 
 
 // Handling of the navbar scrolling and reservation area sticky mechanism
