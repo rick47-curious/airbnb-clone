@@ -273,11 +273,11 @@ elementDropdownButtonArea.forEach((element, key) => {
 document.getElementById("navbarBtn").addEventListener('click', () => {
     if (document.querySelector(".nav-dropdown >li >button#directToAdmin")) {
         document.querySelector(".nav-dropdown >li >button#directToAdmin").addEventListener('click', () => {
-            location.href = "http://localhost:3000/admin";
+            location.href = "/admin";
         })
     } else if (document.querySelector(".nav-dropdown >li >button#directToHost")) {
         document.querySelector(".nav-dropdown >li >button#directToHost").addEventListener('click', () => {
-            location.href = `http://localhost:3000/host?email=${globJson.email}&phone=${globJson.phoneNumber}`;
+            location.href = `/host?email=${globJson.email}&phone=${globJson.phoneNumber}`;
         })
     }
 })
