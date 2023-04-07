@@ -803,7 +803,8 @@ function loginUser(){
                 }
                 document.querySelector(".clubbed-items .navbar-nav .dropdown-menu").innerHTML += `<li><button class="dropdown-item" type="button">Airbnb your home</button></li>
             <li><button class="dropdown-item" type="button">Host an experience</button></li>
-            <li><button class="dropdown-item" type="button">Help</button></li>`;
+            <li><button class="dropdown-item" type="button">Help</button></li>
+            <li><button class="dropdown-item" type="button" onclick='logoutUser()'>Logout</button></li>`;
             } 
         }).catch((e) => {
             console.log(e);
@@ -853,7 +854,8 @@ fetch("/register", {
     document.querySelector(".clubbed-items .navbar-nav .dropdown-menu").innerHTML = "";
     document.querySelector(".clubbed-items .navbar-nav .dropdown-menu").innerHTML = `<li><button class="dropdown-item" type="button">Airbnb your home</button></li>
 <li><button class="dropdown-item" type="button">Host an experience</button></li>
-<li><button class="dropdown-item" type="button">Help</button></li>`
+<li><button class="dropdown-item" type="button">Help</button></li>
+<li><button class="dropdown-item" type="button" onclick='logoutUser()'>Logout</button></li>`
     }
 }).catch((error)=>{
     console.log(error);
@@ -934,7 +936,7 @@ document.querySelectorAll(".grid-container .grid-col").forEach(element => {
             globSearchObj = reusableExecutor(element);
         }
         window.localStorage.setItem("secpr",element.querySelector(".prop-details > .prop-price").innerText);   
-        location.href = `http://localhost:3000/rooms/${element.querySelector("#prop_id").innerHTML}?checkin=${globSearchObj['checkin']}&checkout=${globSearchObj['checkout']}&guests=${globSearchObj['guests']}`;
+        location.href = `/rooms/${element.querySelector("#prop_id").innerHTML}?checkin=${globSearchObj['checkin']}&checkout=${globSearchObj['checkout']}&guests=${globSearchObj['guests']}`;
         window.localStorage.clear();
     })
     element.querySelector(".prop-details > p").addEventListener('click', () => {
@@ -944,7 +946,7 @@ document.querySelectorAll(".grid-container .grid-col").forEach(element => {
         }
         
         window.localStorage.setItem("secpr",element.querySelector(".prop-details > .prop-price").innerText);
-        location.href = `http://localhost:3000/rooms/${element.querySelector("#prop_id").innerHTML}?checkin=${globSearchObj['checkin']}&checkout=${globSearchObj['checkout']}&guests=${globSearchObj['guests']}`;
+        location.href = `/rooms/${element.querySelector("#prop_id").innerHTML}?checkin=${globSearchObj['checkin']}&checkout=${globSearchObj['checkout']}&guests=${globSearchObj['guests']}`;
         window.localStorage.clear();
     })
 
@@ -954,7 +956,7 @@ document.querySelectorAll(".grid-container .grid-col").forEach(element => {
             globSearchObj = reusableExecutor(element);
         }
         window.localStorage.setItem("secpr",element.querySelector(".prop-details > .prop-price").innerText);
-        location.href = `http://localhost:3000/rooms/${element.querySelector("#prop_id").innerHTML}?checkin=${globSearchObj['checkin']}&checkout=${globSearchObj['checkout']}&guests=${globSearchObj['guests']}`;
+        location.href = `/rooms/${element.querySelector("#prop_id").innerHTML}?checkin=${globSearchObj['checkin']}&checkout=${globSearchObj['checkout']}&guests=${globSearchObj['guests']}`;
         window.localStorage.clear();
     })
 
@@ -964,11 +966,17 @@ document.querySelectorAll(".grid-container .grid-col").forEach(element => {
             globSearchObj = reusableExecutor(element);
         }
         window.localStorage.setItem("secpr",element.querySelector(".prop-details > .prop-price").innerText);
-        location.href = `http://localhost:3000/rooms/${element.querySelector("#prop_id").innerHTML}?checkin=${globSearchObj['checkin']}&checkout=${globSearchObj['checkout']}&guests=${globSearchObj['guests']}`;
+        location.href = `/rooms/${element.querySelector("#prop_id").innerHTML}?checkin=${globSearchObj['checkin']}&checkout=${globSearchObj['checkout']}&guests=${globSearchObj['guests']}`;
         window.localStorage.clear();
     })
 });
 
+function logoutUser(){
+    fetch("/logout",{method: "POST"})
+    .then(res=>res.json()).then(response=>{
+        location.href = "/";
+    })
+}
 function reusableExecutor(element){
     let globSearchObj = {};
     let modDate = element.querySelectorAll(".prop-details .prop-desc")[1].innerText;

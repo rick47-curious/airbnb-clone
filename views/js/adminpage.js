@@ -567,3 +567,10 @@ const alertBadAddRequest = (message) => {
     ].join('')
     return wrapper;
 }
+
+function logoutUser(){
+    fetch("/logout",{method: "POST"})
+    .then(res=>res.json()).then(response=>{
+        location.href = "/";
+    })
+}

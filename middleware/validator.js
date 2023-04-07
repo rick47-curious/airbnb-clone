@@ -166,14 +166,14 @@ const isValidDate = (dob)=>{
 const isValidLogin = (req,res,next)=>{
 
   let errorCount = 0;
-
-  if (req.body.email== "" && req.body.phone == ""){
+  if (req.body.password!=="" && (req.body.email =="" && req.body.phoneNumber=="")){
+    errorCount+=1;
+  }else if (req.body.email== "" && req.body.phoneNumber == "" && req.body.password == ""){
     errorCount+=1; 
   }else if (req.body.password == ""){
     errorCount+=1;
-  }else if (req.body.password!="" && (req.body.email ==""||req.body.phone=="")){
-    errorCount+=1;
   }
+  
 
   if (errorCount > 0){
       return res.status(400).json({

@@ -45,13 +45,20 @@
                             d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
                         </svg>
                       </button>
-                      <ul class="dropdown-menu dropdown-menu-lg-end nav-dropdown" style="top:3rem;">
-                        <li><button class="dropdown-item fw-semibold" type="button">Sign up</button></li>
-                        <li><button class="dropdown-item" type="button">Login</button></li>
-                        <hr>
+                      <ul class="dropdown-menu dropdown-menu-lg-end nav-dropdown" style="top:3rem;z-index:100;">
+                        <% if (!token) { %>
+                          <li><button class="dropdown-item fw-semibold" type="button">Sign up</button></li>
+                          <li><button class="dropdown-item" type="button">Login</button></li>
+                          <hr>
+                        <% } %>
                         <li><button class="dropdown-item" type="button">Airbnb your home</button></li>
                         <li><button class="dropdown-item" type="button">Host an experience</button></li>
                         <li><button class="dropdown-item" type="button">Help</button></li>
+                        <% if (token) { %>
+                          <li><button class="dropdown-item" type="button" onclick="logoutUser()">Logout</button></li>
+                        <% }else{ %>
+                          <%# Do nothing %>
+                        <%}%>
                       </ul>
                     </li>
                   </ul>
