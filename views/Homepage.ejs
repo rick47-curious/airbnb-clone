@@ -87,12 +87,19 @@
                   </svg>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-lg-end nav-dropdown" style="top:3rem;">
-                  <li><button class="dropdown-item fw-semibold" type="button">Sign up</button></li>
-                  <li><button class="dropdown-item" type="button">Login</button></li>
-                  <hr>
+                  <% if (!token) { %>
+                    <li><button class="dropdown-item fw-semibold" type="button">Sign up</button></li>
+                    <li><button class="dropdown-item" type="button">Login</button></li>
+                    <hr>
+                  <% } %>
                   <li><button class="dropdown-item" type="button">Airbnb your home</button></li>
                   <li><button class="dropdown-item" type="button">Host an experience</button></li>
                   <li><button class="dropdown-item" type="button">Help</button></li>
+                  <% if (token) { %>
+                   <li><button class="dropdown-item" type="button" onclick="logoutUser()">Logout</button></li>
+                  <% } else{%>
+                    <%# Do nothing %>
+                  <%}%>
                 </ul>
               </li>
             </ul>

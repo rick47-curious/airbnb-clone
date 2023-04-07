@@ -339,3 +339,10 @@ function reusablePriceCheck(tempJson){
     document.getElementById("diffDate").innerHTML = diffDays;
     document.getElementById("priceSection").innerHTML =`$ ${parseInt(document.getElementById("originalRate").innerHTML) * parseInt(document.getElementById("diffDate").innerHTML)}`;
 }
+
+function logoutUser(){
+    fetch("/logout",{method: "POST"})
+    .then(res=>res.json()).then(response=>{
+        location.href = "/";
+    })
+}

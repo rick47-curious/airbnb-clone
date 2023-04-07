@@ -29,6 +29,7 @@ app.use(express.static(path.join(__dirname,'/views/css')));
 app.use(express.static(path.join(__dirname,'/views/js')));
 app.get('/',async (req,res)=>{
     let result = await homePageController.get();
+    result['token'] = req.cookies["accessToken"]
     res.render('Homepage',result);
 })
 
@@ -65,8 +66,15 @@ app.post('/auth', isValidLogin,async (req,res)=>{
 
 app.post('/register',userValidationRules(),validate,async (req,res)=>{
     let jsonResponse = await homePageController.addUser(req.body);
-    const token = jwt.sign({"role":req.type,"name":req.firstname},process.env.JWT_SECRET_KEY)
+    const token = jwt.sign({"role":req.body.type,"name":req.body.firstname},process.env.JWT_SECRET_KEY)
     res.cookie("accessToken",token,{httpOnly:true}).status(200).json(jsonResponse);
+})
+
+app.post('/logout',async(req,res)=>{
+    res.clearCookie("accessToken").status(200)
+    .json({
+        message: "Logged Out Successfully"
+    })
 })
 
 app.use((error,req,res,next)=>{
